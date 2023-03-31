@@ -1,0 +1,3 @@
+class EnemyBoss extends Enemy{
+    
+}

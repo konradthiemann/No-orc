@@ -1,0 +1,3 @@
+class EnemyTwo extends Enemy{
+    
+}
