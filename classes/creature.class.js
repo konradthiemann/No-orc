@@ -1,5 +1,5 @@
 class Creature extends MovableObject{
-    health;
+    health = 100;
 
     turnAround(){
         
