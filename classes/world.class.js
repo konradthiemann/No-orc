@@ -27,6 +27,9 @@ class World{
         new TileObject('./img/Background/Tiles/Ground_grass_0001_tile.png', 700, 430),
         new TileObject('./img/Background/Tiles/Ground_grass_0022_tile.png', 75, 310),
     ];
+    birds = [
+        new Bird(),
+    ];
     character = new Character();
     enemies = [
         new EnemyOne(),
@@ -46,6 +49,7 @@ class World{
 
         this.addObjectToMap(this.backgroundObjects);
         this.addObjectToMap(this.tileObjects);
+        this.addObjectToMap(this.birds);
         this.addObjectToMap(this.enemies);
         this.addToMap(this.character);        
 
