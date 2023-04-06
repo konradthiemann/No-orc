@@ -51,7 +51,7 @@ class World{
         this.addObjectToMap(this.tileObjects);
         this.addObjectToMap(this.birds);
         this.addObjectToMap(this.enemies);
-        this.addToMap(this.character);        
+        this.addToMap(this.character);     
 
         let self = this;
         requestAnimationFrame(function() {
