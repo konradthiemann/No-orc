@@ -38,27 +38,32 @@ class World{
     ];
     canvas;
     keyboard;
+    camera_x = 0;
 
     constructor(canvas, keyboard){
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
         this.draw();
-        // this.setWorld();
+        this.setWorld();
     }
 
-    // setWorld(){
-    //     this.character.world = this;
-    // }
+    setWorld(){
+        this.character.world = this;
+    }
 
     draw(){
         this.ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+        this.ctx.translate(this.camera_x, 0);
 
         this.addObjectToMap(this.backgroundObjects);
         this.addObjectToMap(this.tileObjects);
         this.addObjectToMap(this.birds);
         this.addObjectToMap(this.enemies);
-        this.addToMap(this.character);     
+        this.addToMap(this.character);
+        
+        this.ctx.translate(-this.camera_x, 0);
 
         let self = this;
         requestAnimationFrame(function() {
