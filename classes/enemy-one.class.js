@@ -2,6 +2,7 @@ class EnemyOne extends Enemy{
     height = 100;
     width = 100;
     y = 350;
+    
     IMAGES_WALK = [
         './img/Orc/Walking/0_Orc_Walking_000.png',
         './img/Orc/Walking/0_Orc_Walking_001.png',
@@ -33,18 +34,22 @@ class EnemyOne extends Enemy{
     constructor(){
         super().loadImage('./img/Orc/Walking/0_Orc_Walking_000.png');
         this.loadImages(this.IMAGES_WALK);
+
         this.x = 200 + Math.random() * 500;
+        this.speed = 1 + Math.random() * 0.5;
+
         this.enemyOneRun();
     }
 
     enemyOneRun(){
+        this.moveRight();
         setInterval(() => {
             let i = this.currentIMG % this.IMAGES_WALK.length;
             let path = this.IMAGES_WALK[i];
             this.img = this.imgCache[path];
 
             this.currentIMG ++;
-            this.x = this.x + 1;
+            // this.x = this.x + 1;
         }, 50);
     }
 }
