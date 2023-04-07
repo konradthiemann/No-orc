@@ -4,9 +4,10 @@ class Character extends Creature{
     specialRecource = 100;
     height = 150;
     width = 150;
-    x = 50;
-    y = 190;
+    x = 101;
+    y = 310;
     speed;
+    thresholdReached;
     
     IMAGES_RUN = [
         './img/Mage/Run/run1.png',
@@ -32,12 +33,24 @@ class Character extends Creature{
             if (keyboard.RIGHT == true) {
                 this.x += 3;
                 this.otherDirection = false;
+                this.thresholdReached = 1;
             }
-
             if (keyboard.LEFT == true) {
                 this.x -= 3;
                 this.otherDirection = true;
+                this.thresholdReached = 0;
             }
+
+
+            if (this.x <= 100 && this.thresholdReached !== 1) {
+                this.world.camera_x = -this.x + 101;
+                this.thresholdReached = true;
+            }
+            if (this.x >= 500 && this.thresholdReached == 1) {
+                this.world.camera_x = -this.x + 501;
+                this.thresholdReached = true;
+            }
+            
         }, 1000 / 60);
 
         setInterval(() => {
