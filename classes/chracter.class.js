@@ -42,11 +42,11 @@ class Character extends Creature{
             }
 
 
-            if (this.x <= 100 && this.thresholdReached !== 1) {
+            if (this.x + this.world.camera_x <= 100  && this.thresholdReached !== 1) {
                 this.world.camera_x = -this.x + 101;
                 this.thresholdReached = true;
             }
-            if (this.x >= 500 && this.thresholdReached == 1) {
+            if (this.x + this.world.camera_x >= 500  && this.thresholdReached == 1) {
                 this.world.camera_x = -this.x + 501;
                 this.thresholdReached = true;
             }
