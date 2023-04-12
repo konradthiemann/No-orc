@@ -77,22 +77,10 @@ const level1 = new Level(
         new TileObject('./img/Background/Tiles/Ground_grass_0001_tile.png', 2150, 430),
         new TileObject('./img/Background/Tiles/Ground_grass_0001_tile.png', 2200, 430),
 
-        new TileObject('./img/Background/Tiles/Ground_grass_0001_tile.png', 0, 430),
-        new TileObject('./img/Background/Tiles/Ground_grass_0001_tile.png', 50, 430),
-        new TileObject('./img/Background/Tiles/Ground_grass_0001_tile.png', 100, 430),
-        new TileObject('./img/Background/Tiles/Ground_grass_0001_tile.png', 150, 430),
-        new TileObject('./img/Background/Tiles/Ground_grass_0001_tile.png', 200, 430),
-        new TileObject('./img/Background/Tiles/Ground_grass_0001_tile.png', 250, 430),
-        new TileObject('./img/Background/Tiles/Ground_grass_0001_tile.png', 300, 430),
-        new TileObject('./img/Background/Tiles/Ground_grass_0001_tile.png', 350, 430),
-        new TileObject('./img/Background/Tiles/Ground_grass_0001_tile.png', 400, 430),
-        new TileObject('./img/Background/Tiles/Ground_grass_0001_tile.png', 450, 430),
-        new TileObject('./img/Background/Tiles/Ground_grass_0001_tile.png', 500, 430),
-        new TileObject('./img/Background/Tiles/Ground_grass_0001_tile.png', 550, 430),
-        new TileObject('./img/Background/Tiles/Ground_grass_0001_tile.png', 600, 430),
-        new TileObject('./img/Background/Tiles/Ground_grass_0001_tile.png', 650, 430),
-        new TileObject('./img/Background/Tiles/Ground_grass_0001_tile.png', 700, 430),
-        new TileObject('./img/Background/Tiles/Ground_grass_0022_tile.png', 75, 310),
+        new TileObject('./img/Background/Tiles/Ground_grass_0001_tile.png', 2250, 430),
+        new TileObject('./img/Background/Tiles/Ground_grass_0001_tile.png', 2300, 430),
+        new TileObject('./img/Background/Tiles/Ground_grass_0001_tile.png', 2350, 430),
+        new TileObject('./img/Background/Tiles/Ground_grass_0001_tile.png', 2400, 430),
     ],
     [
         new Bird(),
@@ -105,6 +93,13 @@ const level1 = new Level(
         new EnemyOne(),
         new EnemyTwo(),
         new EnemyThree(),
+        new EnemyOne(),
+        new EnemyTwo(),
+        new EnemyThree(),
+        new EnemyBoss(),
+    ],
+    [
+        new Coin(),
     ]
 
 );
