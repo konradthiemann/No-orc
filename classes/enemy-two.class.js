@@ -16,12 +16,12 @@ class EnemyTwo extends Enemy{
         super().loadImage('./img/Orc-Boss/Walk1.png');
         this.loadImages(this.IMAGES_WALK);
 
-        this.x = 200 + Math.random() * 500;
+        this.x = 200 + Math.random() * 1800;
         this.enemyTwoRun();
     }
 
     enemyTwoRun(){
-        this.moveRight();
+        this.moveLeft();
         setInterval(() => {
             let i = this.currentIMG % this.IMAGES_WALK.length;
             let path = this.IMAGES_WALK[i];
