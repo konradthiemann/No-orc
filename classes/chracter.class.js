@@ -5,7 +5,7 @@ class Character extends Creature{
     height = 150;
     width = 150;
     x = 101;
-    y = 310;
+    y = 100;
     speed;
     thresholdReached;
     idleIntervalSet = false;
@@ -36,14 +36,40 @@ class Character extends Creature{
         './img/Mage/Idle/idle13.png',
         './img/Mage/Idle/idle14.png'
     ];
+    IMAGES_JUMPING = [
+        './img/Mage/Jump/jump1.png',
+        './img/Mage/Jump/jump2.png',
+        './img/Mage/Jump/jump3.png',
+        './img/Mage/Jump/jump4.png',
+        './img/Mage/Jump/jump5.png',
+        './img/Mage/Jump/jump6.png',
+        './img/Mage/Jump/jump7.png',
+    ];
     currentIMG = 0;
+    speedY = 0;
+    acceleration = 1.75;
 
     constructor(){
         super().loadImage('./img/Mage/Idle/Idle1.png');
         this.loadImages(this.IMAGES_RUN);
         this.loadImages(this.IMAGES_IDLE);
-
+        this.loadImages(this.IMAGES_JUMPING);
+        this.applyGravity();
         this.characterRun();
+    }
+
+    applyGravity(){
+        setInterval(() => {
+            if (this.isAboveGround()) {
+                console.log(this.speedY);
+                this.y -= this.speedY;
+                this.speedY -=this.acceleration;
+            }
+        }, 1000/50);
+    }
+
+    isAboveGround(){
+        return this.y < 300;
     }
 
     characterRun(){
@@ -81,12 +107,20 @@ class Character extends Creature{
         }, 1000 / 60);
 
         setInterval(() => {
-            if (keyboard.RIGHT == true || keyboard.LEFT == true) {
-                let i = this.currentIMG % this.IMAGES_RUN.length;
-                let path = this.IMAGES_RUN[i];
+            if (this.isAboveGround()) {
+                let i = this.currentIMG % this.IMAGES_JUMPING.length;
+                let path = this.IMAGES_JUMPING[i];
                 this.img = this.imgCache[path];
     
                 this.currentIMG ++; 
+            }else{
+                if (keyboard.RIGHT == true || keyboard.LEFT == true) {
+                    let i = this.currentIMG % this.IMAGES_RUN.length;
+                    let path = this.IMAGES_RUN[i];
+                    this.img = this.imgCache[path];
+        
+                    this.currentIMG ++; 
+                }
             }
         }, 80);
 
