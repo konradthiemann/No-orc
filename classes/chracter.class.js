@@ -6,7 +6,7 @@ class Character extends Creature{
     width = 150;
     x = 101;
     y = 100;
-    speed;
+    speed = 3;
     thresholdReached;
     idleIntervalSet = false;
     idleImageCount;
@@ -47,7 +47,8 @@ class Character extends Creature{
     ];
     currentIMG = 0;
     speedY = 0;
-    acceleration = 1.75;
+    acceleration = 2;
+    jumpAnimationCounter = 0;
 
     constructor(){
         super().loadImage('./img/Mage/Idle/Idle1.png');
@@ -60,27 +61,31 @@ class Character extends Creature{
 
     applyGravity(){
         setInterval(() => {
-            if (this.isAboveGround()) {
+            if (this.isAboveGround() || this.speedY > 0) {
                 console.log(this.speedY);
                 this.y -= this.speedY;
                 this.speedY -=this.acceleration;
+                if (this.y >= 310) {
+                    this.speedY = 0;
+                    this.jumpAnimationCounter = 0;
+                }
             }
-        }, 1000/50);
+        }, 20);
     }
 
     isAboveGround(){
-        return this.y < 300;
+        return this.y < 310;
     }
 
     characterRun(){
         setInterval(() => {
-            if (keyboard.LEFT == false && keyboard.RIGHT == false && this.idleImageCount == 0) {
+            if (keyboard.LEFT == false && keyboard.RIGHT == false && this.idleImageCount == 0 && !this.isAboveGround()) {
                 this.loadImage('./img/Mage/Idle/Idle1.png');
             }
 
             if (keyboard.LEFT == true) {
                 if (this.x >= -20) {
-                    this.x -= 3;
+                    this.moveLeft();
                 }
                 this.otherDirection = true;
                 this.thresholdReached = 0;
@@ -88,12 +93,19 @@ class Character extends Creature{
 
             if (keyboard.RIGHT == true) {
                 if (this.x <= 2140) {
-                    this.x += 3;
+                   this.moveRight();
                 }
                 this.otherDirection = false;
                 this.thresholdReached = 1;
             }
 
+            if (keyboard.UP == true  && !this.isAboveGround()) {
+                this.jump();
+            }
+
+            if (keyboard.SPACE == true  && !this.isAboveGround()) {
+                this.jump();
+            }
 
             if (this.x + this.world.camera_x <= 100  && this.thresholdReached !== 1 && this.x >= 100) {
                 this.world.camera_x = -this.x + 101;
@@ -107,12 +119,13 @@ class Character extends Creature{
         }, 1000 / 60);
 
         setInterval(() => {
-            if (this.isAboveGround()) {
+            if (this.isAboveGround() && this.jumpAnimationCounter < this.IMAGES_JUMPING.length) {
                 let i = this.currentIMG % this.IMAGES_JUMPING.length;
                 let path = this.IMAGES_JUMPING[i];
                 this.img = this.imgCache[path];
     
                 this.currentIMG ++; 
+                this.jumpAnimationCounter ++;
             }else{
                 if (keyboard.RIGHT == true || keyboard.LEFT == true) {
                     let i = this.currentIMG % this.IMAGES_RUN.length;
@@ -150,7 +163,7 @@ class Character extends Creature{
     }
 
     jump(){
-        
+        this.speedY = 28;
     }
 
     attackTwo(){
