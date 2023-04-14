@@ -55,7 +55,7 @@ class Character extends Creature{
         this.loadImages(this.IMAGES_RUN);
         this.loadImages(this.IMAGES_IDLE);
         this.loadImages(this.IMAGES_JUMPING);
-        this.applyGravity();
+        // this.applyGravity();
         this.characterRun();
     }
 
@@ -138,7 +138,7 @@ class Character extends Creature{
         }, 80);
 
         setInterval(() => {
-            if (keyboard.RIGHT == false && keyboard.LEFT == false && this.idleIntervalSet == false) {
+            if (keyboard.RIGHT == false && keyboard.LEFT == false && this.idleIntervalSet == false && !this.isAboveGround()) {
                 this.loadImage('./img/Mage/Idle/Idle1.png');
                 this.idleIntervalSet = true;
                 let idleInterval = 3000 + Math.random() * 5000;
@@ -148,7 +148,7 @@ class Character extends Creature{
                         let path = this.IMAGES_IDLE[this.idleImageCount];
                         this.img = this.imgCache[path];
 
-                        if (this.idleImageCount == this.IMAGES_IDLE.length || keyboard.LEFT == true || keyboard.RIGHT == true) {
+                        if (this.idleImageCount == this.IMAGES_IDLE.length || keyboard.LEFT == true || keyboard.RIGHT == true || keyboard.UP == true) {
                             this.idleIntervalSet = false;
                             this.idleImageCount = 0;
                             this.loadImage('./img/Mage/Idle/Idle1.png');

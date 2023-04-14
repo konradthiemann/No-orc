@@ -36,7 +36,7 @@ class EnemyThree extends Enemy{
         this.x = 200 + Math.random() * 1800;
         this.speed = 1 + Math.random() * 0.5;
         
-        this.enemyThreeRun();
+        // this.enemyThreeRun();
     }
 
     enemyThreeRun(){
