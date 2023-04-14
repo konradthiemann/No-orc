@@ -17,7 +17,7 @@ class EnemyTwo extends Enemy{
         this.loadImages(this.IMAGES_WALK);
 
         this.x = 200 + Math.random() * 1800;
-        this.enemyTwoRun();
+        // this.enemyTwoRun();
     }
 
     enemyTwoRun(){
