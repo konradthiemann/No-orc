@@ -30,7 +30,7 @@ window.addEventListener('keydown', (e)=>{
         keyboard.DOWN = true;
     }
 
-    if (e.key == '') {
+    if (e.key == ' ') {
         keyboard.SPACE = true;
     }
 
@@ -68,7 +68,7 @@ window.addEventListener('keyup', (e)=>{
         console.log(keyboard.DOWN);
     }
 
-    if (e.key == '') {
+    if (e.key == ' ') {
         keyboard.SPACE = false;
         console.log(keyboard.SPACE);
     }

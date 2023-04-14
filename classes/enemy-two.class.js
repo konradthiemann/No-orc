@@ -2,7 +2,7 @@ class EnemyTwo extends Enemy{
     height = 250;
     width = 250;
     y = 250;
-    speed = 5;
+    
     IMAGES_WALK = [
         './img/Orc-Boss/Walk1.png',
         './img/Orc-Boss/Walk2.png',
@@ -21,16 +21,16 @@ class EnemyTwo extends Enemy{
     }
 
     enemyTwoRun(){
-        this.moveLeft();
+        
         setInterval(() => {
             let i = this.currentIMG % this.IMAGES_WALK.length;
             let path = this.IMAGES_WALK[i];
             this.img = this.imgCache[path];
 
-            this.speed = 1 + Math.random() * 0.5;
+            this.speed = 4 + Math.random() * 0.5;
 
             this.currentIMG ++;
-            // this.x = this.x + 5;
+            this.moveLeft();
         }, 80);
     }
 }

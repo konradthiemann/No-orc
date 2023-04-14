@@ -42,14 +42,15 @@ class EnemyOne extends Enemy{
     }
 
     enemyOneRun(){
-        this.moveLeft();
+        
         setInterval(() => {
             let i = this.currentIMG % this.IMAGES_WALK.length;
             let path = this.IMAGES_WALK[i];
             this.img = this.imgCache[path];
 
             this.currentIMG ++;
-            // this.x = this.x - 1;
+            
+            this.moveLeft();
         }, 50);
     }
 }

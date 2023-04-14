@@ -3,7 +3,7 @@ class MovableObject {
     y ;
     img;
     imgCache = {};
-    speed = 1;
+    speed;
     otherDirection = false;
 
     loadImage(path){
@@ -20,14 +20,10 @@ class MovableObject {
     }
 
     moveRight() {
-        setInterval(() => {
             this.x = this.x + this.speed;
-        }, 50);
     }
 
     moveLeft(){
-        setInterval(() => {
             this.x = this.x - this.speed;
-        }, 50);
     }
 }
