@@ -28,6 +28,10 @@ class World{
             this.enemies.forEach((enemy) => {
                 if (this.character.isColliding(enemy)) {
                     console.log('collision with character', enemy);
+                    //enemy hit animation 1 time
+                    // enemy.playAnimation(enemy.IMAGES_ATTACK);
+                    // console.log(enemy.IMAGES_ATTACK)
+                    //damage to character
                 }
             });
         }, 20);
