@@ -128,11 +128,7 @@ class Character extends Creature{
                 this.jumpAnimationCounter ++;
             }else{
                 if (keyboard.RIGHT == true || keyboard.LEFT == true) {
-                    let i = this.currentIMG % this.IMAGES_RUN.length;
-                    let path = this.IMAGES_RUN[i];
-                    this.img = this.imgCache[path];
-        
-                    this.currentIMG ++; 
+                    this.playAnimation(this.IMAGES_RUN);
                 }
             }
         }, 80);

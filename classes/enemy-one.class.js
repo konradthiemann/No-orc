@@ -29,11 +29,26 @@ class EnemyOne extends Enemy{
         './img/Orc/Walking/0_Orc_Walking_022.png',
         './img/Orc/Walking/0_Orc_Walking_023.png',
     ];
+    IMAGES_ATTACK = [
+        './img/Orc/Slashing/0_Orc_Slashing_000.png',
+        './img/Orc/Slashing/0_Orc_Slashing_001.png',
+        './img/Orc/Slashing/0_Orc_Slashing_002.png',
+        './img/Orc/Slashing/0_Orc_Slashing_003.png',
+        './img/Orc/Slashing/0_Orc_Slashing_004.png',
+        './img/Orc/Slashing/0_Orc_Slashing_005.png',
+        './img/Orc/Slashing/0_Orc_Slashing_006.png',
+        './img/Orc/Slashing/0_Orc_Slashing_007.png',
+        './img/Orc/Slashing/0_Orc_Slashing_008.png',
+        './img/Orc/Slashing/0_Orc_Slashing_009.png',
+        './img/Orc/Slashing/0_Orc_Slashing_010.png',
+        './img/Orc/Slashing/0_Orc_Slashing_012.png',
+    ];
     currentIMG = 0;
 
     constructor(){
         super().loadImage('./img/Orc/Walking/0_Orc_Walking_000.png');
         this.loadImages(this.IMAGES_WALK);
+        this.loadImages(this.IMAGES_ATTACK);
 
         this.x = 200 + Math.random() * 1800;
         this.speed = 1 + Math.random() * 0.5;
@@ -44,13 +59,38 @@ class EnemyOne extends Enemy{
     enemyOneRun(){
         
         setInterval(() => {
-            let i = this.currentIMG % this.IMAGES_WALK.length;
-            let path = this.IMAGES_WALK[i];
-            this.img = this.imgCache[path];
-
-            this.currentIMG ++;
-            
-            this.moveLeft();
+            this.playAnimation(this.IMAGES_WALK);
+            this.chooseDirection();
         }, 50);
+    }
+
+    chooseDirection(){
+        // console.log(world.character.otherDirection)
+
+        if (world.character.otherDirection == false) {
+            if (this.x + this.width / 2 < (world.character.x +16)) {
+                this.moveRight();
+                this.otherDirection = false;
+            }
+            
+            if (this.x + this.width / 2 > (world.character.x + 150)) {
+                this.moveLeft();
+                this.otherDirection = true;
+            }
+        }
+        
+        if (world.character.otherDirection == true) {
+            if (this.x + this.width / 2 < world.character.x + 20) {
+                this.moveRight();
+                this.otherDirection = false;
+            }
+            
+            if (this.x + this.width / 2 > world.character.x + 60) {
+                this.moveLeft();
+                this.otherDirection = true;
+            }
+        }
+
+        
     }
 }
