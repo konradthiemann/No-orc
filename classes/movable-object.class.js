@@ -73,7 +73,7 @@ class MovableObject {
                 && this.y < mo.y  + mo.height ;
         }
         if ((mo instanceof EnemyOne || mo instanceof EnemyThree) && this.otherDirection == true) {
-            return this.x  + this.width > mo.x  
+            return this.x  + this.width - 55 > mo.x   
                 && this.y  + this.height - 150 > mo.y - 105 
                 && this.x  < mo.x 
                 && this.y < mo.y  + mo.height ;
@@ -81,14 +81,14 @@ class MovableObject {
 
         if (mo instanceof EnemyBoss && this.otherDirection == false) {
             return this.x  + this.width - 50 > mo.x + 50
-                && this.y  + this.height - 150 > mo.y - 105
-                && this.x  < mo.x + 27  
-                && this.y < mo.y  + mo.height ;
+                && this.y  + this.height - 150 > mo.y +99
+                && this.x  < mo.x + 280  
+                && this.y < mo.y  + mo.height - 180;
         }
         if (mo instanceof EnemyBoss && this.otherDirection == true) {
-            return this.x  + this.width > mo.x  
-                && this.y  + this.height - 150 > mo.y - 105 
-                && this.x  < mo.x 
+            return this.x  + this.width - 50 < mo.x  + 350
+                && this.y  + this.height - 150 > mo.y + 99 
+                && this.x  > mo.x 
                 && this.y < mo.y  + mo.height ;
         }
 

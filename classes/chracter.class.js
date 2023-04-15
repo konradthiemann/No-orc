@@ -55,7 +55,7 @@ class Character extends Creature{
         this.loadImages(this.IMAGES_RUN);
         this.loadImages(this.IMAGES_IDLE);
         this.loadImages(this.IMAGES_JUMPING);
-        // this.applyGravity();
+        this.applyGravity();
         this.characterRun();
     }
 
