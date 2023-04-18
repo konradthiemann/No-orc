@@ -1,8 +1,8 @@
-class EnemyOne extends Enemy{
+class EnemyOne extends Enemy {
     height = 100;
     width = 100;
     y = 350;
-    
+
     IMAGES_WALK = [
         './img/Orc/Walking/0_Orc_Walking_000.png',
         './img/Orc/Walking/0_Orc_Walking_001.png',
@@ -45,52 +45,65 @@ class EnemyOne extends Enemy{
     ];
     currentIMG = 0;
 
-    constructor(){
+    constructor() {
         super().loadImage('./img/Orc/Walking/0_Orc_Walking_000.png');
         this.loadImages(this.IMAGES_WALK);
         this.loadImages(this.IMAGES_ATTACK);
 
-        this.x = 200 + Math.random() * 1800;
+        // this.x = 200 + Math.random() * 1800;
+        this.x = 200 + Math.random() * 80;
         this.speed = 1 + Math.random() * 0.5;
 
         this.enemyOneRun();
     }
 
-    enemyOneRun(){
-        
+    enemyOneRun() {
         setInterval(() => {
-            this.playAnimation(this.IMAGES_WALK);
             this.chooseDirection();
         }, 50);
     }
 
-    chooseDirection(){
-        // console.log(world.character.otherDirection)
+    chooseDirection() {
+        // console.log(this.isColliding)
 
-        if (world.character.otherDirection == false) {
-            if (this.x + this.width / 2 < (world.character.x +16)) {
+        if (this.x / 2 < world.character.x / 2 && this.attackAnimationStarted == false) {
+            this.otherDirection = false;
+            if (this.isColliding == false) {
+                this.playAnimation(this.IMAGES_WALK);
                 this.moveRight();
-                this.otherDirection = false;
-            }
-            
-            if (this.x + this.width / 2 > (world.character.x + 150)) {
-                this.moveLeft();
-                this.otherDirection = true;
-            }
-        }
-        
-        if (world.character.otherDirection == true) {
-            if (this.x + this.width / 2 < world.character.x + 20) {
-                this.moveRight();
-                this.otherDirection = false;
-            }
-            
-            if (this.x + this.width / 2 > world.character.x + 60) {
-                this.moveLeft();
-                this.otherDirection = true;
             }
         }
 
+        if (this.x / 2 > world.character.x / 2 && this.attackAnimationStarted == false) {
+            this.otherDirection = true;
+            if (this.isColliding == false) {
+                this.playAnimation(this.IMAGES_WALK);
+                this.moveLeft();
+            }
+        }
+    }
+
+    attack() {
+
+        let attackImageCount = 0;
         
+        let enemyAttack = setInterval(() => {
+        
+        let path = this.IMAGES_ATTACK[attackImageCount];
+        this.img = this.imgCache[path];
+
+            if (attackImageCount == this.IMAGES_ATTACK.length  || this.isColliding == false) {
+                
+                this.attackAnimationStarted = false;
+                attackImageCount = 0;
+                this.loadImage('./img/Orc/Walking/0_Orc_Walking_000.png');
+                console.log('clearInterval');
+                clearInterval(enemyAttack);
+            }
+
+            attackImageCount++;
+
+        }, 100);
+
     }
 }

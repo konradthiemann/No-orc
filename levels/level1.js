@@ -92,11 +92,11 @@ const level1 = new Level(
     [
         new EnemyOne(),
         // new EnemyTwo(),
-        new EnemyThree(),
-        new EnemyThree(),
-        new EnemyOne(),
+        // new EnemyThree(),
+        // new EnemyThree(),
+        // new EnemyOne(),
         // new EnemyTwo(),
-        new EnemyThree(),
+        // new EnemyThree(),
         // new EnemyBoss(),
     ],
     [

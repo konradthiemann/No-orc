@@ -1,4 +1,4 @@
-class World{
+class World {
     ctx;
 
     backgroundObjects = level1.backgroundObjects;
@@ -10,7 +10,7 @@ class World{
     keyboard;
     camera_x = 0;
 
-    constructor(canvas, keyboard){
+    constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
@@ -19,25 +19,35 @@ class World{
         this.checkCollisions();
     }
 
-    setWorld(){
+    setWorld() {
         this.character.world = this;
     }
 
-    checkCollisions(){
+    checkCollisions() {
         setInterval(() => {
             this.enemies.forEach((enemy) => {
                 if (this.character.isColliding(enemy)) {
-                    console.log('collision with character', enemy);
-                    //enemy hit animation 1 time
-                    // enemy.playAnimation(enemy.IMAGES_ATTACK);
-                    // console.log(enemy.IMAGES_ATTACK)
-                    //damage to character
+                    // console.log('collision with character', enemy);
+                    enemy.isColliding = true;
+                    
+                    if (enemy.attackAnimationStarted == false) {
+                        enemy.attackAnimationStarted = true;
+                        enemy.attack();
+                    }
+
+                    if (enemy.attackAnimationStarted == false) {
+                        enemy.loadImage(enemy.IMAGES_WALK[0]);
+                    }
+                    
+                }else{
+                    enemy.isColliding = false;
+                    enemy.attackAnimationStarted = false;
                 }
             });
         }, 20);
     }
 
-    draw(){
+    draw() {
         this.ctx.clearRect(0, 0, canvas.width, canvas.height)
 
         this.ctx.translate(this.camera_x, 0);
@@ -47,22 +57,22 @@ class World{
         this.addObjectToMap(this.birds);
         this.addObjectToMap(this.enemies);
         this.addToMap(this.character);
-        
+
         this.ctx.translate(-this.camera_x, 0);
 
         let self = this;
-        requestAnimationFrame(function() {
+        requestAnimationFrame(function () {
             self.draw();
         });
     }
 
-    addObjectToMap(objects){
+    addObjectToMap(objects) {
         objects.forEach(o => {
             this.addToMap(o);
         });
     }
 
-    addToMap(mo){
+    addToMap(mo) {
         if (mo.otherDirection) {
             this.flipImage(mo);
         }
@@ -75,14 +85,21 @@ class World{
         }
     }
 
-    flipImage(mo){
-        this.ctx.save();
-        this.ctx.translate(mo.width - 50, 0);
-        this.ctx.scale(-1,1);
-        mo.x = mo.x * -1;
+    flipImage(mo) {
+        if (mo instanceof Character) {
+            this.ctx.save();
+            this.ctx.translate(mo.width - 50, 0);
+            this.ctx.scale(-1, 1);
+            mo.x = mo.x * -1;
+        } else {
+            this.ctx.save();
+            this.ctx.translate(mo.width , 0);
+            this.ctx.scale(-1, 1);
+            mo.x = mo.x * -1;
+        }
     }
 
-    flipImageBack(mo){
+    flipImageBack(mo) {
         mo.x = mo.x * -1;
         this.ctx.restore();
     }
