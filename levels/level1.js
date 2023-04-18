@@ -100,7 +100,7 @@ const level1 = new Level(
         // new EnemyBoss(),
     ],
     [
-        new Coin(),
+        // new Coin(),
     ]
 
 );

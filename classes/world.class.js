@@ -55,8 +55,9 @@ class World {
         this.addObjectToMap(this.backgroundObjects);
         this.addObjectToMap(this.tileObjects);
         this.addObjectToMap(this.birds);
-        this.addObjectToMap(this.enemies);
         this.addToMap(this.character);
+        this.addObjectToMap(this.enemies);
+        
 
         this.ctx.translate(-this.camera_x, 0);
 

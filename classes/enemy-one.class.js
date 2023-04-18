@@ -41,7 +41,7 @@ class EnemyOne extends Enemy {
         './img/Orc/Slashing/0_Orc_Slashing_008.png',
         './img/Orc/Slashing/0_Orc_Slashing_009.png',
         './img/Orc/Slashing/0_Orc_Slashing_010.png',
-        './img/Orc/Slashing/0_Orc_Slashing_012.png',
+        './img/Orc/Slashing/0_Orc_Slashing_011.png',
     ];
     currentIMG = 0;
 
@@ -60,7 +60,7 @@ class EnemyOne extends Enemy {
     enemyOneRun() {
         setInterval(() => {
             this.chooseDirection();
-        }, 50);
+        }, 20);
     }
 
     chooseDirection() {
@@ -96,7 +96,7 @@ class EnemyOne extends Enemy {
                 
                 this.attackAnimationStarted = false;
                 attackImageCount = 0;
-                this.loadImage('./img/Orc/Walking/0_Orc_Walking_000.png');
+                this.loadImage('./img/Orc/Slashing/0_Orc_Slashing_000.png');
                 console.log('clearInterval');
                 clearInterval(enemyAttack);
             }
