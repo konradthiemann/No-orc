@@ -5,7 +5,7 @@ class Character extends Creature{
     height = 150;
     width = 150;
     x = 101;
-    y = 100;
+    y = 306;
     speed = 3;
     thresholdReached;
     idleIntervalSet = false;
@@ -65,7 +65,7 @@ class Character extends Creature{
                 console.log(this.speedY);
                 this.y -= this.speedY;
                 this.speedY -=this.acceleration;
-                if (this.y >= 310) {
+                if (this.y >= 300) {
                     this.speedY = 0;
                     this.jumpAnimationCounter = 0;
                 }
@@ -74,7 +74,7 @@ class Character extends Creature{
     }
 
     isAboveGround(){
-        return this.y < 310;
+        return this.y < 300;
     }
 
     characterRun(){
