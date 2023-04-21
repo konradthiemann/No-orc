@@ -22,7 +22,7 @@ class World {
         this.draw();
         this.setWorld();
         this.checkCollisions();
-        this.createEnemy();
+        // this.createEnemy();
     }
 
     setWorld() {
