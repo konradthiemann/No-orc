@@ -270,10 +270,14 @@ class Character extends MovableObject{
                     clearInterval(animationAttackOne);
                 }
                 if (this.attackImageCount == this.IMAGES_ATTACK.length) {    
-                    console.log('attack one done');               
+                    
+                                
                     this.attackAnimationStarted = false;
+
                     this.loadImage('./img/Mage/Idle/idle1.png');
-                    // world.projectiles.push(new AttackOne);
+                    
+                    world.projectiles.push(new AttackOne());
+                    console.log(world.projectiles.length);   
                     clearInterval(animationAttackOne);
                 }
 

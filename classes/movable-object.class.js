@@ -130,6 +130,7 @@ class MovableObject {
             for (let i = 0; i < world.projectiles.length; i++) {
                 if (world.projectiles[i] === projectile) {
                     world.projectiles.splice(i, 1);
+                    console.log(world.projectiles.length);   
                 }
             }
     }
