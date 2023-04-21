@@ -117,7 +117,6 @@ class MovableObject {
     }
 
     removeObject(object) {
-        // console.log('removeObject');
         setTimeout(() => {
             for (let i = 0; i < world.enemies.length; i++) {
                 if (world.enemies[i] === object) {
@@ -125,5 +124,13 @@ class MovableObject {
                 }
             }
         }, 3000);
+    }
+
+    removeProjectile(projectile) {
+            for (let i = 0; i < world.projectiles.length; i++) {
+                if (world.projectiles[i] === projectile) {
+                    world.projectiles.splice(i, 1);
+                }
+            }
     }
 }
