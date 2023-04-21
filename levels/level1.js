@@ -90,17 +90,10 @@ const level1 = new Level(
         new Bird(),
     ],
     [
-        new EnemyOne(),
-        // new EnemyTwo(),
-        // new EnemyThree(),
-        // new EnemyThree(),
-        // new EnemyOne(),
-        // new EnemyTwo(),
-        // new EnemyThree(),
+        //new EnemyOne(),
+        new EnemyTwo(),
+        //new EnemyOne(),
+        //new EnemyTwo(),
         // new EnemyBoss(),
     ],
-    [
-        // new Coin(),
-    ]
-
 );

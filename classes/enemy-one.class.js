@@ -2,7 +2,7 @@ class EnemyOne extends Enemy {
     height = 100;
     width = 100;
     y = 350;
-
+    autoAttackDmg = 0.5;
     IMAGES_WALK = [
         './img/Orc/Walking/0_Orc_Walking_000.png',
         './img/Orc/Walking/0_Orc_Walking_001.png',
@@ -43,12 +43,30 @@ class EnemyOne extends Enemy {
         './img/Orc/Slashing/0_Orc_Slashing_010.png',
         './img/Orc/Slashing/0_Orc_Slashing_011.png',
     ];
+    IMAGES_DYING = [
+        './img/Orc/Dying/0_Orc_Dying_000.png',
+        './img/Orc/Dying/0_Orc_Dying_001.png',
+        './img/Orc/Dying/0_Orc_Dying_002.png',
+        './img/Orc/Dying/0_Orc_Dying_003.png',
+        './img/Orc/Dying/0_Orc_Dying_004.png',
+        './img/Orc/Dying/0_Orc_Dying_005.png',
+        './img/Orc/Dying/0_Orc_Dying_006.png',
+        './img/Orc/Dying/0_Orc_Dying_007.png',
+        './img/Orc/Dying/0_Orc_Dying_008.png',
+        './img/Orc/Dying/0_Orc_Dying_009.png',
+        './img/Orc/Dying/0_Orc_Dying_010.png',
+        './img/Orc/Dying/0_Orc_Dying_011.png',
+        './img/Orc/Dying/0_Orc_Dying_012.png',
+        './img/Orc/Dying/0_Orc_Dying_013.png',
+        './img/Orc/Dying/0_Orc_Dying_014.png',
+    ];
     currentIMG = 0;
 
     constructor() {
         super().loadImage('./img/Orc/Walking/0_Orc_Walking_000.png');
         this.loadImages(this.IMAGES_WALK);
         this.loadImages(this.IMAGES_ATTACK);
+        this.loadImages(this.IMAGES_DYING);
 
         // this.x = 200 + Math.random() * 1800;
         this.x = 200 + Math.random() * 80;
@@ -61,49 +79,5 @@ class EnemyOne extends Enemy {
         setInterval(() => {
             this.chooseDirection();
         }, 20);
-    }
-
-    chooseDirection() {
-        // console.log(this.isColliding)
-
-        if (this.x / 2 < world.character.x / 2 && this.attackAnimationStarted == false) {
-            this.otherDirection = false;
-            if (this.isColliding == false) {
-                this.playAnimation(this.IMAGES_WALK);
-                this.moveRight();
-            }
-        }
-
-        if (this.x / 2 > world.character.x / 2 && this.attackAnimationStarted == false) {
-            this.otherDirection = true;
-            if (this.isColliding == false) {
-                this.playAnimation(this.IMAGES_WALK);
-                this.moveLeft();
-            }
-        }
-    }
-
-    attack() {
-
-        let attackImageCount = 0;
-        
-        let enemyAttack = setInterval(() => {
-        
-        let path = this.IMAGES_ATTACK[attackImageCount];
-        this.img = this.imgCache[path];
-
-            if (attackImageCount == this.IMAGES_ATTACK.length  || this.isColliding == false) {
-                
-                this.attackAnimationStarted = false;
-                attackImageCount = 0;
-                this.loadImage('./img/Orc/Slashing/0_Orc_Slashing_000.png');
-                console.log('clearInterval');
-                clearInterval(enemyAttack);
-            }
-
-            attackImageCount++;
-
-        }, 100);
-
-    }
+    }    
 }
