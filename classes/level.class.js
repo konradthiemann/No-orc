@@ -3,13 +3,12 @@ class Level{
     tileObjects;
     birds;
     enemies;
-    // coins;
+    //hearth;
 
-    constructor(backgroundObjects, tileObjects, birds, enemies, coins){
+    constructor(backgroundObjects, tileObjects, birds, enemies){
         this.backgroundObjects = backgroundObjects;
         this.tileObjects = tileObjects;
         this.birds = birds;
         this.enemies = enemies;
-        // this.coins = coins;
     }
 }

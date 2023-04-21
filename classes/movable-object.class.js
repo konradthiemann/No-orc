@@ -21,6 +21,7 @@ class MovableObject {
 
     draw(ctx) {
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+        
     }
 
     drawFrame(ctx) {
@@ -32,11 +33,11 @@ class MovableObject {
             ctx.stroke();
         }
 
-        if (this instanceof EnemyOne || this instanceof EnemyThree) {
+        if (this instanceof EnemyOne || this instanceof EnemyTwo) {
             ctx.beginPath();
             ctx.lineWidth = '3';
             ctx.strokeStyle = 'blue';
-            ctx.rect(this.x , this.y, this.width, this.height);
+            ctx.rect(this.x, this.y, this.width, this.height);
             ctx.stroke();
         }
 
@@ -58,27 +59,27 @@ class MovableObject {
     }
 
     isColliding(mo) {
-        if ((mo instanceof EnemyOne || mo instanceof EnemyThree) && this.otherDirection == false && mo.otherDirection == true) {
+        if ((mo instanceof EnemyOne || mo instanceof EnemyTwo) && this.otherDirection == false && mo.otherDirection == true) {
             return this.x + this.width - 200 > mo.x - mo.width
                 && this.y + this.height - 150 > mo.y - 105
-                && this.x  < mo.x + mo.width
+                && this.x < mo.x + mo.width
                 && this.y < mo.y + mo.height;
         }
-        if ((mo instanceof EnemyOne || mo instanceof EnemyThree) && this.otherDirection == true && mo.otherDirection == true) {
-            return this.x  - 40 < mo.x 
+        if ((mo instanceof EnemyOne || mo instanceof EnemyTwo) && this.otherDirection == true && mo.otherDirection == true) {
+            return this.x - 40 < mo.x
                 && this.y + this.height - 150 > mo.y - 105
-                && this.x + 40 > mo.x 
+                && this.x + 40 > mo.x
                 && this.y < mo.y + mo.height;
         }
 
-        if ((mo instanceof EnemyOne || mo instanceof EnemyThree) && this.otherDirection == false && mo.otherDirection == false) {
-            return this.x  < mo.x + mo.width - 60
+        if ((mo instanceof EnemyOne || mo instanceof EnemyTwo) && this.otherDirection == false && mo.otherDirection == false) {
+            return this.x < mo.x + mo.width - 60
                 && this.y + this.height - 150 > mo.y - 105
                 && this.x + this.width > mo.x
                 && this.y < mo.y + mo.height;
         }
-        if ((mo instanceof EnemyOne || mo instanceof EnemyThree) && this.otherDirection == true && mo.otherDirection == false) {
-            return this.x - this.width + 110 < mo.x 
+        if ((mo instanceof EnemyOne || mo instanceof EnemyTwo) && this.otherDirection == true && mo.otherDirection == false) {
+            return this.x - this.width + 110 < mo.x
                 && this.y + this.height - 150 > mo.y - 105
                 && this.x > mo.x
                 && this.y < mo.y + mo.height;
@@ -113,5 +114,16 @@ class MovableObject {
 
     moveLeft() {
         this.x = this.x - this.speed;
+    }
+
+    removeObject(object) {
+        // console.log('removeObject');
+        setTimeout(() => {
+            for (let i = 0; i < world.enemies.length; i++) {
+                if (world.enemies[i] === object) {
+                    world.enemies.splice(i, 1);
+                }
+            }
+        }, 3000);
     }
 }

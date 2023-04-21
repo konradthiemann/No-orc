@@ -8,11 +8,11 @@ function init(){
     world = new World(canvas, keyboard);
     
     
-    console.log('My Character is', world.character)
+    // console.log('My Character is', world.character)
 }
 
 window.addEventListener('keydown', (e)=>{
-    console.log(e.key);
+    // console.log(e.key);
     if (e.key == 'ArrowLeft') {
         keyboard.LEFT = true;
     }

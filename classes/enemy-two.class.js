@@ -1,36 +1,81 @@
 class EnemyTwo extends Enemy{
-    height = 250;
-    width = 250;
-    y = 250;
-    
+    height = 100;
+    width = 100;
+    y = 350;
     IMAGES_WALK = [
-        './img/Orc-Boss/Walk1.png',
-        './img/Orc-Boss/Walk2.png',
-        './img/Orc-Boss/Walk3.png',
-        './img/Orc-Boss/Walk4.png',
-        './img/Orc-Boss/Walk5.png',
-        './img/Orc-Boss/Walk6.png',
+        './img/Goblin/Walking/0_Goblin_Walking_000.png',
+        './img/Goblin/Walking/0_Goblin_Walking_001.png',
+        './img/Goblin/Walking/0_Goblin_Walking_002.png',
+        './img/Goblin/Walking/0_Goblin_Walking_003.png',
+        './img/Goblin/Walking/0_Goblin_Walking_004.png',
+        './img/Goblin/Walking/0_Goblin_Walking_005.png',
+        './img/Goblin/Walking/0_Goblin_Walking_006.png',
+        './img/Goblin/Walking/0_Goblin_Walking_007.png',
+        './img/Goblin/Walking/0_Goblin_Walking_008.png',
+        './img/Goblin/Walking/0_Goblin_Walking_009.png',
+        './img/Goblin/Walking/0_Goblin_Walking_010.png',
+        './img/Goblin/Walking/0_Goblin_Walking_011.png',
+        './img/Goblin/Walking/0_Goblin_Walking_012.png',
+        './img/Goblin/Walking/0_Goblin_Walking_013.png',
+        './img/Goblin/Walking/0_Goblin_Walking_014.png',
+        './img/Goblin/Walking/0_Goblin_Walking_015.png',
+        './img/Goblin/Walking/0_Goblin_Walking_016.png',
+        './img/Goblin/Walking/0_Goblin_Walking_017.png',
+        './img/Goblin/Walking/0_Goblin_Walking_018.png',
+        './img/Goblin/Walking/0_Goblin_Walking_019.png',
+        './img/Goblin/Walking/0_Goblin_Walking_020.png',
+        './img/Goblin/Walking/0_Goblin_Walking_021.png',
+        './img/Goblin/Walking/0_Goblin_Walking_022.png',
+    ];
+    IMAGES_ATTACK = [
+        './img/Goblin/Slashing/0_Goblin_Slashing_000.png',
+        './img/Goblin/Slashing/0_Goblin_Slashing_001.png',
+        './img/Goblin/Slashing/0_Goblin_Slashing_002.png',
+        './img/Goblin/Slashing/0_Goblin_Slashing_003.png',
+        './img/Goblin/Slashing/0_Goblin_Slashing_004.png',
+        './img/Goblin/Slashing/0_Goblin_Slashing_005.png',
+        './img/Goblin/Slashing/0_Goblin_Slashing_006.png',
+        './img/Goblin/Slashing/0_Goblin_Slashing_007.png',
+        './img/Goblin/Slashing/0_Goblin_Slashing_008.png',
+        './img/Goblin/Slashing/0_Goblin_Slashing_009.png',
+        './img/Goblin/Slashing/0_Goblin_Slashing_010.png',
+        './img/Goblin/Slashing/0_Goblin_Slashing_011.png',
+    ];
+    IMAGES_DYING = [
+        './img/Goblin/Dying/0_Goblin_Dying_001.png',
+        './img/Goblin/Dying/0_Goblin_Dying_000.png',
+        './img/Goblin/Dying/0_Goblin_Dying_002.png',
+        './img/Goblin/Dying/0_Goblin_Dying_003.png',
+        './img/Goblin/Dying/0_Goblin_Dying_004.png',
+        './img/Goblin/Dying/0_Goblin_Dying_005.png',
+        './img/Goblin/Dying/0_Goblin_Dying_006.png',
+        './img/Goblin/Dying/0_Goblin_Dying_007.png',
+        './img/Goblin/Dying/0_Goblin_Dying_008.png',
+        './img/Goblin/Dying/0_Goblin_Dying_009.png',
+        './img/Goblin/Dying/0_Goblin_Dying_010.png',
+        './img/Goblin/Dying/0_Goblin_Dying_011.png',
+        './img/Goblin/Dying/0_Goblin_Dying_012.png',
+        './img/Goblin/Dying/0_Goblin_Dying_013.png',
+        './img/Goblin/Dying/0_Goblin_Dying_014.png',
     ];
     currentIMG = 0;
+
     constructor(){
-        super().loadImage('./img/Orc-Boss/Walk1.png');
+        super().loadImage('./img/Goblin/Walking/0_Goblin_Walking_000.png');
         this.loadImages(this.IMAGES_WALK);
+        this.loadImages(this.IMAGES_ATTACK);
+        this.loadImages(this.IMAGES_DYING);
 
         this.x = 200 + Math.random() * 1800;
-        // this.enemyTwoRun();
+        this.speed = 1 + Math.random() * 0.5;
+        
+        this.enemyTwoRun();
     }
 
     enemyTwoRun(){
         
         setInterval(() => {
-            let i = this.currentIMG % this.IMAGES_WALK.length;
-            let path = this.IMAGES_WALK[i];
-            this.img = this.imgCache[path];
-
-            this.speed = 4 + Math.random() * 0.5;
-
-            this.currentIMG ++;
-            this.moveLeft();
-        }, 80);
+            this.chooseDirection();
+        }, 50);
     }
 }
