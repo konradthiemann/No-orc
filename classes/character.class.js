@@ -269,15 +269,13 @@ class Character extends MovableObject{
                     this.loadImage('./img/Mage/Idle/idle1.png');
                     clearInterval(animationAttackOne);
                 }
-                if (this.attackImageCount == this.IMAGES_ATTACK.length) {    
-                    
-                                
-                    this.attackAnimationStarted = false;
-
-                    this.loadImage('./img/Mage/Idle/idle1.png');
-                    
+                if (this.attackImageCount == 6) {     
                     world.projectiles.push(new AttackOne());
-                    console.log(world.projectiles.length);   
+                }
+
+                if (this.attackImageCount == this.IMAGES_ATTACK.length) {                                 
+                    this.attackAnimationStarted = false;
+                    this.loadImage('./img/Mage/Idle/idle1.png');  
                     clearInterval(animationAttackOne);
                 }
 
