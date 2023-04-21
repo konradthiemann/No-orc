@@ -1,15 +1,19 @@
 class World {
     ctx;
     level1 = level1;
+    backgroundObjectsHell = level1.backgroundObjectsHell;
     backgroundObjects = level1.backgroundObjects;
+    tileObjectsHell = level1.tileObjectsHell;
     tileObjects = level1.tileObjects;
     birds = level1.birds;
     character = new Character();
     enemies = level1.enemies;
+    projectiles = level1.projectiles;
     canvas;
     keyboard;
     camera_x = 0;
     amountOfDeadEnemys = 0;
+    bossSpawned = false;
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -40,9 +44,7 @@ class World {
                     if (enemy.dyingAnimationStarted == false && jumpOnEnemy == true) {
                         enemy.dyingAnimationStarted = true;
                         this.amountOfDeadEnemys++;
-                        // console.log(this.amountOfDeadEnemys);
                         enemy.die(enemy);    
-                        //this.character.highJumpAnimationStarted = true;
                         this.character.jumpAnimationCounter = 0;
                         this.character.highJumpAnimationCounter = 0;
                         this.character.highJumpAnimationSet = true;
@@ -59,13 +61,8 @@ class World {
 
     checkHeightOnCollision() {
         if (this.character.y <= 250 && this.character.speedY < 0) {
-            // console.log('true');
-            // console.log(this.character.y);
-            // console.log(this.character.speedY);
             return true;
         } else {
-            // console.log('false');
-            // console.log(this.character.speedY);
             return false;
         }
     }
@@ -75,11 +72,14 @@ class World {
 
         this.ctx.translate(this.camera_x, 0);
 
+        this.addObjectToMap(this.backgroundObjectsHell);
         this.addObjectToMap(this.backgroundObjects);
+        this.addObjectToMap(this.tileObjectsHell);
         this.addObjectToMap(this.tileObjects);
         this.addObjectToMap(this.birds);
         this.addToMap(this.character);
         this.addObjectToMap(this.enemies);
+        this.addObjectToMap(this.projectiles);
 
 
         this.ctx.translate(-this.camera_x, 0);
@@ -102,7 +102,6 @@ class World {
         }
 
         mo.draw(this.ctx);
-        //mo.drawFrame(this.ctx);
 
         if (mo.otherDirection) {
             this.flipImageBack(mo);
@@ -112,7 +111,7 @@ class World {
     createEnemy() {
         setInterval(() => {
             let newOrc
-            if (this.amountOfDeadEnemys < 1 || world.enemies.lenghs < 0) {
+            if ((this.amountOfDeadEnemys < 10 || world.enemies.lenghs < 5) && this.bossSpawned == false) {
                 let rng = Math.random();
                 if (rng < 0.5) {
                     newOrc = new EnemyOne();
@@ -121,12 +120,45 @@ class World {
                 }
                 // console.log('newOrc');
                 this.enemies.push(newOrc);
-            }else{
+            }else if (this.bossSpawned == false){
+                this.bossSpawned = true;
                 // console.log('newBoss');
                 let newOrc = new EnemyBoss;
                 this.enemies.push(newOrc);
+
+                this.changeWorld();
             }
         }, 1000);
+    }
+
+    changeWorld(){
+        this.backgroundObjects.forEach((backgroundObject) => {    
+            setInterval(() => {
+                backgroundObject.y -= 6;
+            }, 20);
+        }
+        );
+
+        this.backgroundObjectsHell.forEach((backgroundObject) => {    
+            let moveNewBackground = setInterval(() => {
+                backgroundObject.y -= 6;
+                if (backgroundObject.y < 0) {
+                    backgroundObject.y = 0;
+                    clearInterval(moveNewBackground);
+                }
+            }, 20);
+        }
+        );
+
+        this.tileObjects.forEach((TileObject) => {
+            let timeout = Math.random() * 2000;
+            setTimeout(() => {
+                setInterval(() => {
+                    TileObject.y += 1;
+                }, 20);
+            }, timeout);
+        });
+        
     }
 
     flipImage(mo) {

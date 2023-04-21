@@ -8,7 +8,6 @@ class Enemy extends MovableObject{
     autoAttackDmg = 1;
 
     chooseDirection() {
-        // console.log(this.isColliding)
 
         if (this.x / 2 < world.character.x / 2 && this.attackAnimationStarted == false && this.dyingAnimationStarted == false) {
             this.otherDirection = false;
@@ -51,7 +50,6 @@ class Enemy extends MovableObject{
         if (world.character.isColliding(enemy) && world.character.hurtAnimationStarted == false) {
             world.character.hurtAnimationStarted = true;
             world.character.hurt(enemy.autoAttackDmg);
-            // console.log('HIT!');
         }
     }
 
