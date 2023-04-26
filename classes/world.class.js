@@ -22,7 +22,7 @@ class World {
         this.draw();
         this.setWorld();
         this.checkCollisions();
-        // this.createEnemy();
+        this.createEnemy();
     }
 
     setWorld() {
@@ -38,13 +38,15 @@ class World {
 
                     if (enemy.attackAnimationStarted == false && jumpOnEnemy == false && enemy.dyingAnimationStarted == false) {
                         enemy.attackAnimationStarted = true;
-                        enemy.attack(enemy);
+                        enemy.attack(enemy.enemyId);
+                        console.log(enemy.enemyId);
+                        this.character.hurt();
                     }
 
                     if (enemy.dyingAnimationStarted == false && jumpOnEnemy == true) {
                         enemy.dyingAnimationStarted = true;
                         this.amountOfDeadEnemys++;
-                        enemy.die(enemy);    
+                        enemy.die(enemy.enemyId);  
                         this.character.jumpAnimationCounter = 0;
                         this.character.highJumpAnimationCounter = 0;
                         this.character.highJumpAnimationSet = true;
@@ -111,24 +113,22 @@ class World {
     createEnemy() {
         setInterval(() => {
             let newOrc
-            if ((this.amountOfDeadEnemys < 10 || world.enemies.lenghs < 5) && this.bossSpawned == false) {
+            if (( world.enemies.lenghs < 15) && this.bossSpawned == false) {
                 let rng = Math.random();
                 if (rng < 0.5) {
                     newOrc = new EnemyOne();
                 } else {
                     newOrc = new EnemyTwo();
                 }
-                // console.log('newOrc');
                 this.enemies.push(newOrc);
-            }else if (this.bossSpawned == false){
+            }else if (this.bossSpawned == false && this.amountOfDeadEnemys >= 20){
                 this.bossSpawned = true;
-                // console.log('newBoss');
                 let newOrc = new EnemyBoss;
                 this.enemies.push(newOrc);
 
                 this.changeWorld();
             }
-        }, 1000);
+        }, 5000);
     }
 
     changeWorld(){

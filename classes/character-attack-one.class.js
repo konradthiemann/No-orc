@@ -1,11 +1,13 @@
-class AttackOne extends MovableObject{
+class AttackOne extends MovableObject {
     height = 50;
     width = 50;
     speed = 20;
-    // x = (world.character.x + world.character.with / 2);
-    // y = (world.character.y + world.character.height / 2);
     animationImageCounter = 0;
     otherDirection = false;
+    projectileDistance = 0;
+    hitTarget = false;
+    y = (world.character.y + world.character.height / 2 - 15);
+    x = (world.character.x + world.character.width / 2);
 
     IMAGES_ATTACK = [
         './img/Mage/Fire/fire1.png',
@@ -19,44 +21,53 @@ class AttackOne extends MovableObject{
         './img/Mage/Fire/fire9.png',
     ]
 
-    constructor(){
+    constructor() {
         super().loadImage('./img/Mage/Fire/fire1.png');
         this.loadImages(this.IMAGES_ATTACK);
-
-        this.x = (world.character.x - 20 );
-        this.y = (world.character.y + world.character.height /2 - 15);
-        
-        setTimeout(() => {
-            this.moveAttack(); 
-        }, 50);
-        
+        this.chooseDirection();
+        this.moveAttack();
+        this.checkCollision();
     }
 
-    chooseDirection(){
+    chooseDirection() {
+
         if (world.character.otherDirection == true) {
             this.otherDirection = true;
-        }else{
+            this.x = (world.character.x + this.projectileDistance);
+
+        } else {
             this.otherDirection = false;
         }
     }
 
-    moveAttack(){
-        console.log('moveAttack function')
-        this.chooseDirection();
+    checkCollision() {
+        setInterval(() => {
+            world.enemies.forEach(enemy => {
+                if (this.isColliding(enemy) && this.hitTarget == false && enemy.enemyIsDead == false) {
+                    this.hitTarget = true;
+                    enemy.isColliding = true;
+                    enemy.dyingAnimationStarted = true;
+                    this.amountOfDeadEnemys++;
+                    enemy.enemyIsDead = true;
+                    enemy.die(enemy.enemyId);
+                }
+            });
+        }, 20);
+    }
 
+    moveAttack() {
         let animateAttackOne = setInterval(() => {
             let path = this.IMAGES_ATTACK[this.animationImageCounter];
             this.img = this.imgCache[path];
-            console.log(this.x);
-            console.log(this.y);
 
-            if (this.otherDirection = true) {
+            if (this.otherDirection == true) {
+                this.x = (this.x - this.projectileDistance);
                 this.moveLeft();
             }
 
-            if (this.otherDirection = false){
+            if (this.otherDirection == false) {
+                this.x = (this.x + this.projectileDistance);
                 this.moveRight();
-                console.log('projectile moving right');
             }
 
             if (this.animationImageCounter == this.IMAGES_ATTACK.length) {
@@ -64,7 +75,8 @@ class AttackOne extends MovableObject{
                 clearInterval(animateAttackOne);
             }
 
-            this.animationImageCounter ++;
-        }, 1000/20);
+            this.projectileDistance = this.projectileDistance + 1;
+            this.animationImageCounter++;
+        }, 1000 / 20);
     }
 }

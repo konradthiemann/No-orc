@@ -48,9 +48,6 @@ class Character extends MovableObject{
         './img/Mage/Idle/idle14.png'
     ];
     IMAGES_JUMPING = [
-        // './img/Mage/Jump/jump1.png',
-        // './img/Mage/Jump/jump2.png',
-        // './img/Mage/Jump/jump3.png',
         './img/Mage/Jump/jump3.png',
         './img/Mage/Jump/jump3.png',
         './img/Mage/Jump/jump3.png',
@@ -58,8 +55,6 @@ class Character extends MovableObject{
         './img/Mage/Jump/jump5.png',
         './img/Mage/Jump/jump6.png',
         './img/Mage/Jump/jump6.png',
-        // './img/Mage/Jump/jump6.png',
-        // './img/Mage/Jump/jump6.png',
         './img/Mage/Jump/jump7.png',
     ];
     IMAGES_HIGH_JUMPING = [
@@ -94,7 +89,7 @@ class Character extends MovableObject{
     
 
     constructor(){
-        super().loadImage('./img/Mage/Idle/Idle1.png');
+        super().loadImage('./img/Mage/Idle/idle1.png');
         this.loadImages(this.IMAGES_RUN);
         this.loadImages(this.IMAGES_IDLE);
         this.loadImages(this.IMAGES_JUMPING);
@@ -110,7 +105,6 @@ class Character extends MovableObject{
             if (this.isAboveGround() || this.speedY > 0) {
                 this.y -= this.speedY;
                 this.speedY -=this.acceleration;
-                // console.log(this.speedY);
                 if (this.y >= 300) {
                     this.speedY = 0;
                     this.y = 306;
@@ -132,7 +126,7 @@ class Character extends MovableObject{
     characterRun(){
         setInterval(() => {
             if (keyboard.LEFT == false && keyboard.RIGHT == false && this.idleImageCount == 0 && !this.isAboveGround() && this.hurtAnimationStarted == false && this.attackAnimationStarted == false) {
-                this.loadImage('./img/Mage/Idle/Idle1.png');
+                this.loadImage('./img/Mage/Idle/idle1.png');
             }
 
             if (keyboard.LEFT == true) {
@@ -168,7 +162,6 @@ class Character extends MovableObject{
             if (keyboard.X == true && this.attackAnimationStarted == false && this.hurtAnimationStarted == false) {
                 this.attackAnimationStarted = true;
                 this.attackOne();
-                // console.log('attack one done');
             }
 
             if (this.x + this.world.camera_x <= 100  && this.thresholdReached !== 1 && this.x >= 100) {
@@ -208,8 +201,7 @@ class Character extends MovableObject{
         setInterval(() => {
             
             if (keyboard.RIGHT == false && keyboard.LEFT == false && this.idleIntervalSet == false && !this.isAboveGround() && this.hurtAnimationStarted == false && this.attackAnimationStarted == false) {
-                // console.log('characterRest');
-                this.loadImage('./img/Mage/Idle/Idle1.png');
+                this.loadImage('./img/Mage/Idle/idle1.png');
                 this.idleIntervalSet = true;
                 let idleInterval = 3000 + Math.random() * 5000;
                 this.idleImageCount = 0;
@@ -222,7 +214,7 @@ class Character extends MovableObject{
                         if ((this.idleImageCount == this.IMAGES_IDLE.length) || keyboard.LEFT == true || keyboard.RIGHT == true || keyboard.UP == true || this.hurtAnimationStarted == true || this.isAboveGround() || this.attackAnimationStarted == true) {
                             this.idleIntervalSet = false;
                             this.idleImageCount = 0;
-                            this.loadImage('./img/Mage/Idle/Idle1.png');
+                            this.loadImage('./img/Mage/Idle/idle1.png');
                             clearInterval(idleCharacter);
                         }
 

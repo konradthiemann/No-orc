@@ -6,10 +6,11 @@ class Enemy extends MovableObject{
     attackAnimationStarted = false;
     dyingAnimationStarted = false;
     autoAttackDmg = 1;
+    dyingImageCount = 0;
 
     chooseDirection() {
 
-        if (this.x / 2 < world.character.x / 2 && this.attackAnimationStarted == false && this.dyingAnimationStarted == false) {
+        if ((this.x / 2 < world.character.x / 2 )&& this.attackAnimationStarted == false && this.dyingAnimationStarted == false) {
             this.otherDirection = false;
             if (this.isColliding == false) {
                 this.playAnimation(this.IMAGES_WALK);
@@ -17,7 +18,7 @@ class Enemy extends MovableObject{
             }
         }
 
-        if (this.x / 2 > world.character.x / 2 && this.attackAnimationStarted == false && this.dyingAnimationStarted == false) {
+        if ((this.x / 2 > world.character.x / 2) && this.attackAnimationStarted == false && this.dyingAnimationStarted == false) {
             this.otherDirection = true;
             if (this.isColliding == false) {
                 this.playAnimation(this.IMAGES_WALK);
@@ -53,24 +54,32 @@ class Enemy extends MovableObject{
         }
     }
 
-    die(){
-        let dyingImageCount = 0;
-        let enemyDying = setInterval(() => {
-        let path = this.IMAGES_DYING[dyingImageCount];
-        this.img = this.imgCache[path];
-            if (dyingImageCount == this.IMAGES_DYING.length) {
-                this.enemyIsDead = true;
-                this.loadImage(this.IMAGES_DYING[this.IMAGES_DYING.length - 1]);
-                dyingImageCount = 0;
-                clearInterval(enemyDying);
+    die(enemyId){
+        for (let i = 0; i < world.enemies.length; i++) {
+            if (enemyId == world.enemies[i].enemyId) {
+                let enemyDying = setInterval(() => {
+                    let path = this.IMAGES_DYING[this.dyingImageCount];
+                    this.img = this.imgCache[path];
+                        if (this.dyingImageCount == this.IMAGES_DYING.length) {
+                            this.enemyIsDead = true;
+                            this.loadImage(this.IMAGES_DYING[this.IMAGES_DYING.length - 1]);
+                            this.dyingImageCount = 0;
+                            clearInterval(enemyDying);
+                        }
+                        this.dyingImageCount++;
+                    }, 80);
             }
-            dyingImageCount++;
-        }, 80);
+        }
+        
     }
 
     checkEnemyDead(enemy){
         if (this.enemyIsDead == true) {
             this.removeObject(enemy);            
         }
+    }
+
+    createID(){
+        return Math.random() * 10000;
     }
 }

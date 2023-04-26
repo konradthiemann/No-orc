@@ -2,6 +2,7 @@ class EnemyTwo extends Enemy{
     height = 100;
     width = 100;
     y = 350;
+    enemyId;
     IMAGES_WALK = [
         './img/Goblin/Walking/0_Goblin_Walking_000.png',
         './img/Goblin/Walking/0_Goblin_Walking_001.png',
@@ -65,6 +66,8 @@ class EnemyTwo extends Enemy{
         this.loadImages(this.IMAGES_WALK);
         this.loadImages(this.IMAGES_ATTACK);
         this.loadImages(this.IMAGES_DYING);
+
+        this.enemyId = this.createID();
 
         this.x = 200 + Math.random() * 1800;
         this.speed = 1 + Math.random() * 0.5;
