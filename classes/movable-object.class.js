@@ -21,17 +21,17 @@ class MovableObject {
 
     draw(ctx) {
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
-        
+        this.drawFrame(ctx);
     }
 
     drawFrame(ctx) {
-        if (this instanceof EnemyBoss) {
-            ctx.beginPath();
-            ctx.lineWidth = '3';
-            ctx.strokeStyle = 'blue';
-            ctx.rect(this.x, this.y, this.width, this.height);
-            ctx.stroke();
-        }
+        // if (this instanceof EnemyBoss) {
+        //     ctx.beginPath();
+        //     ctx.lineWidth = '3';
+        //     ctx.strokeStyle = 'blue';
+        //     ctx.rect(this.x, this.y, this.width, this.height);
+        //     ctx.stroke();
+        // }
 
         if (this instanceof EnemyOne || this instanceof EnemyTwo) {
             ctx.beginPath();
@@ -41,15 +41,23 @@ class MovableObject {
             ctx.stroke();
         }
 
-        if (this instanceof EnemyTwo) {
-            ctx.beginPath();
-            ctx.lineWidth = '3';
-            ctx.strokeStyle = 'blue';
-            ctx.rect(this.x + 50, this.y + 90, this.width - 150, this.height - 150);
-            ctx.stroke();
-        }
+        // if (this instanceof EnemyTwo) {
+        //     ctx.beginPath();
+        //     ctx.lineWidth = '3';
+        //     ctx.strokeStyle = 'blue';
+        //     ctx.rect(this.x + 50, this.y + 90, this.width - 150, this.height - 150);
+        //     ctx.stroke();
+        // }
 
-        if (this instanceof Character) {
+        // if (this instanceof Character) {
+        //     ctx.beginPath();
+        //     ctx.lineWidth = '3';
+        //     ctx.strokeStyle = 'blue';
+        //     ctx.rect(this.x, this.y, this.width, this.height);
+        //     ctx.stroke();
+        // }
+
+        if (this instanceof AttackOne) {
             ctx.beginPath();
             ctx.lineWidth = '3';
             ctx.strokeStyle = 'blue';
@@ -59,31 +67,33 @@ class MovableObject {
     }
 
     isColliding(mo) {
-        if ((mo instanceof EnemyOne || mo instanceof EnemyTwo) && this.otherDirection == false && mo.otherDirection == true) {
+        if ((mo instanceof EnemyOne || mo instanceof EnemyTwo) && this.otherDirection == false && mo.otherDirection == true && this instanceof Character) {
             return this.x + this.width - 200 > mo.x - mo.width
                 && this.y + this.height - 150 > mo.y - 105
                 && this.x < mo.x + mo.width
                 && this.y < mo.y + mo.height;
         }
-        if ((mo instanceof EnemyOne || mo instanceof EnemyTwo) && this.otherDirection == true && mo.otherDirection == true) {
+        if ((mo instanceof EnemyOne || mo instanceof EnemyTwo) && this.otherDirection == true && mo.otherDirection == true && this instanceof Character) {
             return this.x - 40 < mo.x
                 && this.y + this.height - 150 > mo.y - 105
                 && this.x + 40 > mo.x
                 && this.y < mo.y + mo.height;
         }
 
-        if ((mo instanceof EnemyOne || mo instanceof EnemyTwo) && this.otherDirection == false && mo.otherDirection == false) {
+        if ((mo instanceof EnemyOne || mo instanceof EnemyTwo) && this.otherDirection == false && mo.otherDirection == false && this instanceof Character) {
             return this.x < mo.x + mo.width - 60
                 && this.y + this.height - 150 > mo.y - 105
                 && this.x + this.width > mo.x
                 && this.y < mo.y + mo.height;
         }
-        if ((mo instanceof EnemyOne || mo instanceof EnemyTwo) && this.otherDirection == true && mo.otherDirection == false) {
+        if ((mo instanceof EnemyOne || mo instanceof EnemyTwo) && this.otherDirection == true && mo.otherDirection == false && this instanceof Character) {
             return this.x - this.width + 110 < mo.x
                 && this.y + this.height - 150 > mo.y - 105
                 && this.x > mo.x
                 && this.y < mo.y + mo.height;
         }
+
+        //Endboss
 
         // if (mo instanceof EnemyBoss && this.otherDirection == false) {
         //     return this.x + this.width - 50 > mo.x + 50
@@ -97,6 +107,34 @@ class MovableObject {
         //         && this.x > mo.x
         //         && this.y < mo.y + mo.height;
         // }
+
+        //Fireball
+
+        if ((mo instanceof Enemy) && this.otherDirection == false && mo.otherDirection == true && this instanceof AttackOne) {
+            return this.x + this.width > mo.x - mo.width
+                && this.y + this.height  > mo.y 
+                && this.x < mo.x 
+                && this.y < mo.y + mo.height;
+        }
+        if ((mo instanceof Enemy) && this.otherDirection == true && mo.otherDirection == true && this instanceof AttackOne) {
+            return this.x - this.width < mo.x
+                && this.y + this.height  > mo.y 
+                && this.x  > mo.x - mo.width
+                && this.y < mo.y + mo.height;
+        }
+
+        if ((mo instanceof Enemy) && this.otherDirection == false && mo.otherDirection == false && this instanceof AttackOne) {
+            return this.x + this.width > mo.x 
+                && this.y + this.height > mo.y
+                && this.x < mo.x + mo.width
+                && this.y < mo.y + mo.height;
+        }
+        if ((mo instanceof Enemy) && this.otherDirection == true && mo.otherDirection == false && this instanceof AttackOne) {
+            return this.x - this.width  < mo.x + mo.width
+                && this.y + this.height  > mo.y 
+                && this.x > mo.x
+                && this.y < mo.y + mo.height;
+        }
 
     }
 
@@ -129,8 +167,7 @@ class MovableObject {
     removeProjectile(projectile) {
             for (let i = 0; i < world.projectiles.length; i++) {
                 if (world.projectiles[i] === projectile) {
-                    world.projectiles.splice(i, 1);
-                    console.log(world.projectiles.length);   
+                    world.projectiles.splice(i, 1); 
                 }
             }
     }

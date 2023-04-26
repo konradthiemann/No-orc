@@ -43,7 +43,7 @@ class EnemyBoss extends Enemy{
         './img/endboss/Hurt/0_Reaper_Man_Hurt_011.png'
     ];
 
-    IMAGES_DEATH = [
+    IMAGES_DYING = [
         './img/endboss/Dying/0_Reaper_Man_Dying_000.png',
         './img/endboss/Dying/0_Reaper_Man_Dying_001.png',
         './img/endboss/Dying/0_Reaper_Man_Dying_002.png',
@@ -94,5 +94,16 @@ class EnemyBoss extends Enemy{
     constructor(){
         super().loadImage('./img/endboss/Walking/0_Reaper_Man_Walking_000.png');
         this.loadImages(this.IMAGES_WALK);
+        this.loadImages(this.IMAGES_ATTACK);
+        this.loadImages(this.IMAGES_DYING);
+        this.loadImages(this.IMAGES_THROW);
+
+        this.enemyBossRun();
+    }
+
+    enemyBossRun(){
+        setInterval(() => {
+            this.chooseDirection();
+        }, 20);
     }
 }
