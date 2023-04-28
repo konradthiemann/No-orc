@@ -64,6 +64,7 @@ class Enemy extends MovableObject{
                             this.enemyIsDead = true;
                             this.loadImage(this.IMAGES_DYING[this.IMAGES_DYING.length - 1]);
                             this.dyingImageCount = 0;
+                            this.dropHeart();
                             clearInterval(enemyDying);
                         }
                         this.dyingImageCount++;
@@ -81,5 +82,17 @@ class Enemy extends MovableObject{
 
     createID(){
         return Math.random() * 10000;
+    }
+
+    dropHeart(){
+        let dropChance = Math.random();
+        if (dropChance > 0.25) {
+            console.log('HEARTS!');
+            let x = this.x;
+            let y = this.y + (this.height / 3); 
+            let newHeart = new Heart(x, y);
+
+            world.hearts.push(newHeart);
+        }
     }
 }

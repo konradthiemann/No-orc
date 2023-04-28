@@ -58,10 +58,7 @@ class Character extends MovableObject{
         './img/Mage/Jump/jump7.png',
     ];
     IMAGES_HIGH_JUMPING = [
-        // './img/Mage/High_Jump/high_jump1.png',
-        // './img/Mage/High_Jump/high_jump2.png',
-        // './img/Mage/High_Jump/high_jump3.png',
-        // './img/Mage/High_Jump/high_jump4.png',
+
         './img/Mage/High_Jump/high_jump5.png',
         './img/Mage/High_Jump/high_jump6.png',
         './img/Mage/High_Jump/high_jump7.png',
@@ -69,7 +66,6 @@ class Character extends MovableObject{
         './img/Mage/High_Jump/high_jump9.png',
         './img/Mage/High_Jump/high_jump10.png',
         './img/Mage/High_Jump/high_jump11.png',
-        // './img/Mage/High_Jump/high_jump12.png',
     ];
     IMAGES_HURT = [
         './img/Mage/Hurt/hurt1.png',

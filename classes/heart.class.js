@@ -1,10 +1,10 @@
-class Coin extends MovableObject{
-    height = 50;
-    width = 50;
-    x = 100;
-    y = 50;
+class Heart extends MovableObject{
+    height = 30;
+    width = 30;
+    x ;
+    y ;
 
-    IMAGES_COIN = [
+    IMAGES_HEART = [
         './img/Heart/heart.png',
         './img/Heart/heart2.png',
         './img/Heart/heart3.png',
@@ -17,8 +17,18 @@ class Coin extends MovableObject{
         './img/Heart/heart10.png',
     ];
 
-    constructor(){
+    constructor(x , y){
         super().loadImage('./img/Heart/heart.png');
-        this.loadImages(this.IMAGES_COIN);
+        
+        this.loadImages(this.IMAGES_HEART);
+        this.x = x;
+        this.y = y;
+        this.animateHeart();
+    }
+
+    animateHeart(){
+        setInterval(() => {
+            this.playAnimation(this.IMAGES_HEART);
+        }, 80);
     }
 }
