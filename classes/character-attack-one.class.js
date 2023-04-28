@@ -1,16 +1,16 @@
 class AttackOne extends MovableObject {
     height = 50;
     width = 50;
-    speed = 20;
+    speed = 5;
     animationImageCounter = 0;
     otherDirection = false;
     projectileDistance = 0;
     hitTarget = false;
     y = (world.character.y + world.character.height / 2 - 15);
     x = (world.character.x + world.character.width / 2);
+    id;
 
     IMAGES_ATTACK = [
-        './img/Mage/Fire/fire1.png',
         './img/Mage/Fire/fire2.png',
         './img/Mage/Fire/fire3.png',
         './img/Mage/Fire/fire4.png',
@@ -24,9 +24,14 @@ class AttackOne extends MovableObject {
     constructor() {
         super().loadImage('./img/Mage/Fire/fire1.png');
         this.loadImages(this.IMAGES_ATTACK);
+        this.getID();
         this.chooseDirection();
         this.moveAttack();
         this.checkCollision();
+    }
+
+    getID(){
+        this.id = Math.random() * 100000;
     }
 
     chooseDirection() {
@@ -40,10 +45,13 @@ class AttackOne extends MovableObject {
         }
     }
 
+    checkCollisionInterval;
+
     checkCollision() {
-        setInterval(() => {
+        this.checkCollisionInterval = setInterval(() => {
             world.enemies.forEach(enemy => {
                 if (this.isColliding(enemy) && this.hitTarget == false && enemy.enemyIsDead == false) {
+                    console.log('colliding with enemy');
                     this.hitTarget = true;
                     enemy.isColliding = true;
                     enemy.dyingAnimationStarted = true;
@@ -71,8 +79,9 @@ class AttackOne extends MovableObject {
             }
 
             if (this.animationImageCounter == this.IMAGES_ATTACK.length) {
-                this.removeProjectile(this);
+                this.removeProjectile(this.id);
                 clearInterval(animateAttackOne);
+                clearInterval(this.checkCollisionInterval);
             }
 
             this.projectileDistance = this.projectileDistance + 1;

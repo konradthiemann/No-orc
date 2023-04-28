@@ -3,7 +3,10 @@ class EnemyBoss extends Enemy{
     width = 170;
     x = 300;
     y = 295;
-    speed = 5;
+    speed = 1;
+    attackImageCount = 0;
+    rangeAttackStarted = false;
+    hurtAnimationStarted = false;
 
     IMAGES_WALK = [
         './img/endboss/Walking/0_Reaper_Man_Walking_000.png',
@@ -102,8 +105,51 @@ class EnemyBoss extends Enemy{
     }
 
     enemyBossRun(){
-        setInterval(() => {
+        let run = setInterval(() => {
             this.chooseDirection();
         }, 20);
+
+        let checkForRange = setInterval(() => {
+            let distanceOne = (world.character.x + this.width/2) - (this.x + this.width/2);
+           
+            if ((distanceOne < - 300 && distanceOne > - 400 || distanceOne > 300 && distanceOne < 400) && this.rangeAttackStarted == false) {
+                
+                clearInterval(run);
+                this.rangeAttack();
+                clearInterval(checkForRange);
+            }
+        }, 3000);
+    }
+
+    rangeAttack(){
+        console.log('RangeAttack');
+        this.rangeAttackStarted = true;
+        this.attackImageCount = 0;
+
+            let animationRangeAttack = setInterval(() => {
+            
+                let path = this.IMAGES_THROW[this.attackImageCount];
+                this.img = this.imgCache[path];
+
+                if (this.hurtAnimationStarted == true) {
+                    this.loadImage('./img/endboss/Walking/0_Reaper_Man_Walking_000.png');
+                    clearInterval(animationRangeAttack);
+                }
+                if (this.attackImageCount == 6) {     
+                    let x = this.x + (this.width/2);
+                    let y = this.y + (this.height/2);
+                    world.projectiles.push(new BossRangeAttack(x, y, this.otherDirection));
+                    console.log(world.projectiles);
+                }
+
+                if (this.attackImageCount == this.IMAGES_THROW.length) {                                 
+                    this.loadImage('./img/endboss/Walking/0_Reaper_Man_Walking_000.png'); 
+                    this.rangeAttackStarted = false; 
+                    this.enemyBossRun();
+                    clearInterval(animationRangeAttack);
+                }
+
+                this.attackImageCount++;
+            }, 80);
     }
 }

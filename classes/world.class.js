@@ -9,6 +9,7 @@ class World {
     character = new Character();
     enemies = level1.enemies;
     projectiles = level1.projectiles;
+    hearts = level1.hearts;
     canvas;
     keyboard;
     camera_x = 0;
@@ -33,13 +34,13 @@ class World {
         setInterval(() => {
             this.enemies.forEach((enemy) => {
                 if (this.character.isColliding(enemy)) {
+                    console.log('colliding with enemy')
                     enemy.isColliding = true;
                     let jumpOnEnemy = this.checkHeightOnCollision();
 
                     if (enemy.attackAnimationStarted == false && jumpOnEnemy == false && enemy.dyingAnimationStarted == false) {
                         enemy.attackAnimationStarted = true;
                         enemy.attack(enemy.enemyId);
-                        console.log(enemy.enemyId);
                         this.character.hurt();
                     }
 
@@ -56,6 +57,14 @@ class World {
                 }else {
                         enemy.isColliding = false;
                         enemy.checkEnemyDead(enemy);
+                }
+            });
+        }, 20);
+
+        setInterval(() => {
+            this.hearts.forEach(heart => {
+                if (this.character.isColliding(heart)) {
+                    console.log('colliging with heart');
                 }
             });
         }, 20);
@@ -79,9 +88,11 @@ class World {
         this.addObjectToMap(this.tileObjectsHell);
         this.addObjectToMap(this.tileObjects);
         this.addObjectToMap(this.birds);
+        this.addObjectToMap(this.hearts);
         this.addToMap(this.character);
         this.addObjectToMap(this.enemies);
         this.addObjectToMap(this.projectiles);
+        
 
 
         this.ctx.translate(-this.camera_x, 0);
@@ -113,7 +124,7 @@ class World {
     createEnemy() {
         setInterval(() => {
             let newOrc
-            if (( world.enemies.lenghs < 15) && this.bossSpawned == false) {
+            if (( world.enemies.lenghs < 20) && this.bossSpawned == false) {
                 let rng = Math.random();
                 if (rng < 0.5) {
                     newOrc = new EnemyOne();
@@ -121,7 +132,7 @@ class World {
                     newOrc = new EnemyTwo();
                 }
                 this.enemies.push(newOrc);
-            }else if (this.bossSpawned == false && this.amountOfDeadEnemys >= 20){
+            }else if (this.bossSpawned == false && this.amountOfDeadEnemys >= 1){
                 this.bossSpawned = true;
                 let newOrc = new EnemyBoss;
                 this.enemies.push(newOrc);

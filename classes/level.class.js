@@ -6,9 +6,9 @@ class Level{
     birds;
     enemies;
     projectiles;
-    //hearth;
+    hearts;
 
-    constructor(backgroundObjectsHell, backgroundObjects,tileObjectsHell, tileObjects, birds, enemies, projectiles){
+    constructor(backgroundObjectsHell, backgroundObjects,tileObjectsHell, tileObjects, birds, enemies, projectiles, hearts){
         this.backgroundObjectsHell = backgroundObjectsHell;
         this.backgroundObjects = backgroundObjects;
         this.tileObjectsHell = tileObjectsHell;
@@ -16,5 +16,6 @@ class Level{
         this.birds = birds;
         this.enemies = enemies;
         this.projectiles = projectiles;
+        this.hearts = hearts;
     }
 }

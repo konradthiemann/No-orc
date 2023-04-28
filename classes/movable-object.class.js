@@ -5,6 +5,7 @@ class MovableObject {
     imgCache = {};
     speed;
     otherDirection = false;
+    currentIMG = 0;
 
     loadImage(path) {
         this.img = new Image();
@@ -25,13 +26,21 @@ class MovableObject {
     }
 
     drawFrame(ctx) {
-        // if (this instanceof EnemyBoss) {
-        //     ctx.beginPath();
-        //     ctx.lineWidth = '3';
-        //     ctx.strokeStyle = 'blue';
-        //     ctx.rect(this.x, this.y, this.width, this.height);
-        //     ctx.stroke();
-        // }
+        if (this instanceof EnemyBoss) {
+            ctx.beginPath();
+            ctx.lineWidth = '3';
+            ctx.strokeStyle = 'blue';
+            ctx.rect(this.x, this.y, this.width, this.height);
+            ctx.stroke();
+        }
+
+        if (this instanceof EnemyBoss) {
+            ctx.beginPath();
+            ctx.lineWidth = '3';
+            ctx.strokeStyle = 'yellow';
+            ctx.rect(this.x + 35, this.y + 35 , this.width - 70, this.height -55);
+            ctx.stroke();
+        }
 
         if (this instanceof EnemyOne || this instanceof EnemyTwo) {
             ctx.beginPath();
@@ -41,21 +50,38 @@ class MovableObject {
             ctx.stroke();
         }
 
-        // if (this instanceof EnemyTwo) {
-        //     ctx.beginPath();
-        //     ctx.lineWidth = '3';
-        //     ctx.strokeStyle = 'blue';
-        //     ctx.rect(this.x + 50, this.y + 90, this.width - 150, this.height - 150);
-        //     ctx.stroke();
-        // }
+        if (this instanceof EnemyOne || this instanceof EnemyTwo) {
+            ctx.beginPath();
+            ctx.lineWidth = '3';
+            ctx.strokeStyle = 'yellow';
+            ctx.rect(this.x +20, this.y + 15, this.width - 40, this.height - 30);
+            ctx.stroke();
+        }
 
-        // if (this instanceof Character) {
-        //     ctx.beginPath();
-        //     ctx.lineWidth = '3';
-        //     ctx.strokeStyle = 'blue';
-        //     ctx.rect(this.x, this.y, this.width, this.height);
-        //     ctx.stroke();
-        // }
+        
+        if (this instanceof Character && this.otherDirection == false) {
+            ctx.beginPath();
+            ctx.lineWidth = '3';
+            ctx.strokeStyle = 'yellow';
+            ctx.rect(this.x + 30, this.y + 60, this.width - 110, this.height - 80);
+            ctx.stroke();
+        }
+
+        if (this instanceof Character && this.otherDirection == true) {
+            ctx.beginPath();
+            ctx.lineWidth = '3';
+            ctx.strokeStyle = 'yellow';
+            ctx.rect(this.x + 30, this.y + 60, this.width - 110, this.height - 80);
+            ctx.stroke();
+        }
+
+        if (this instanceof Heart) {
+            ctx.beginPath();
+            ctx.lineWidth = '3';
+            ctx.strokeStyle = 'blue';
+            ctx.rect(this.x, this.y, this.width, this.height);
+            ctx.stroke();
+        }
 
         if (this instanceof AttackOne) {
             ctx.beginPath();
@@ -67,75 +93,56 @@ class MovableObject {
     }
 
     isColliding(mo) {
-        if ((mo instanceof EnemyOne || mo instanceof EnemyTwo) && this.otherDirection == false && mo.otherDirection == true && this instanceof Character) {
-            return this.x + this.width - 200 > mo.x - mo.width
-                && this.y + this.height - 150 > mo.y - 105
-                && this.x < mo.x + mo.width
-                && this.y < mo.y + mo.height;
-        }
-        if ((mo instanceof EnemyOne || mo instanceof EnemyTwo) && this.otherDirection == true && mo.otherDirection == true && this instanceof Character) {
-            return this.x - 40 < mo.x
-                && this.y + this.height - 150 > mo.y - 105
-                && this.x + 40 > mo.x
-                && this.y < mo.y + mo.height;
-        }
-
-        if ((mo instanceof EnemyOne || mo instanceof EnemyTwo) && this.otherDirection == false && mo.otherDirection == false && this instanceof Character) {
-            return this.x < mo.x + mo.width - 60
-                && this.y + this.height - 150 > mo.y - 105
-                && this.x + this.width > mo.x
-                && this.y < mo.y + mo.height;
-        }
-        if ((mo instanceof EnemyOne || mo instanceof EnemyTwo) && this.otherDirection == true && mo.otherDirection == false && this instanceof Character) {
-            return this.x - this.width + 110 < mo.x
-                && this.y + this.height - 150 > mo.y - 105
-                && this.x > mo.x
-                && this.y < mo.y + mo.height;
+        //Enemys
+        if ((mo instanceof EnemyOne || mo instanceof EnemyTwo) && this instanceof Character) {
+            return this.x + 30 + this.width - 110 > mo.x + 30 
+                && this.y + 60 + this.height - 80 > mo.y + 15
+                && this.x + 30 < mo.x + 30 + mo.width - 40
+                && this.y + 60 < mo.y + 15 + mo.height - 30;
         }
 
         //Endboss
 
-        // if (mo instanceof EnemyBoss && this.otherDirection == false) {
-        //     return this.x + this.width - 50 > mo.x + 50
-        //         && this.y + this.height - 150 > mo.y + 99
-        //         && this.x < mo.x + 280
-        //         && this.y < mo.y + mo.height - 180;
-        // }
-        // if (mo instanceof EnemyBoss && this.otherDirection == true) {
-        //     return this.x + this.width - 50 < mo.x + 350
-        //         && this.y + this.height - 150 > mo.y + 99
-        //         && this.x > mo.x
-        //         && this.y < mo.y + mo.height;
-        // }
+        if ((mo instanceof EnemyBoss) && this instanceof Character) {
+            return this.x + 30 + this.width - 110 > mo.x  + 35
+                && this.y + 60 + this.height - 80> mo.y + 35
+                && this.x + 30 < mo.x + 35 + mo.width - 70
+                && this.y + 60 < mo.y + 35 + mo.height - 55;
+        }
 
         //Fireball
 
-        if ((mo instanceof Enemy) && this.otherDirection == false && mo.otherDirection == true && this instanceof AttackOne) {
-            return this.x + this.width > mo.x - mo.width
-                && this.y + this.height  > mo.y 
-                && this.x < mo.x 
-                && this.y < mo.y + mo.height;
-        }
-        if ((mo instanceof Enemy) && this.otherDirection == true && mo.otherDirection == true && this instanceof AttackOne) {
-            return this.x - this.width < mo.x
-                && this.y + this.height  > mo.y 
-                && this.x  > mo.x - mo.width
-                && this.y < mo.y + mo.height;
+        if ((mo instanceof EnemyOne || mo instanceof EnemyTwo) && this instanceof AttackOne) {
+            return this.x + this.width > mo.x + 20 
+                && this.y + this.height  > mo.y + 15
+                && this.x < mo.x +20 + mo.width - 40
+                && this.y < mo.y + 15 + mo.height - 30;
         }
 
-        if ((mo instanceof Enemy) && this.otherDirection == false && mo.otherDirection == false && this instanceof AttackOne) {
-            return this.x + this.width > mo.x 
-                && this.y + this.height > mo.y
-                && this.x < mo.x + mo.width
-                && this.y < mo.y + mo.height;
-        }
-        if ((mo instanceof Enemy) && this.otherDirection == true && mo.otherDirection == false && this instanceof AttackOne) {
-            return this.x - this.width  < mo.x + mo.width
-                && this.y + this.height  > mo.y 
-                && this.x > mo.x
-                && this.y < mo.y + mo.height;
+        if ((mo instanceof EnemyBoss)  && this instanceof AttackOne) {
+            return this.x + this.width > mo.x + 35
+                && this.y + this.height  > mo.y + 35
+                && this.x < mo.x + 35 + mo.width - 70
+                && this.y < mo.y + 35 + mo.height - 55;
         }
 
+        //BossRangeAttack
+
+        if (mo instanceof Character && this instanceof BossRangeAttack) {
+            return this.x + this.width > mo.x + 30 
+                && this.y + this.height > mo.y + 70
+                && this.x < mo.x + 30 + mo.width - 110
+                && this.y < mo.y + 70 + mo.height - 80;
+        }
+
+        //Hearts
+        if ((mo instanceof Heart) && this instanceof Character) {
+            return this.x + 30 + this.width - 110 > mo.x  
+                && this.y + 60 + this.height - 80> mo.y 
+                && this.x + 30 < mo.x + mo.width
+                && this.y + 60 < mo.y + mo.height;
+        }
+        
     }
 
     playAnimation(images) {
@@ -164,10 +171,10 @@ class MovableObject {
         }, 3000);
     }
 
-    removeProjectile(projectile) {
+    removeProjectile(id) {
             for (let i = 0; i < world.projectiles.length; i++) {
-                if (world.projectiles[i] === projectile) {
-                    world.projectiles.splice(i, 1); 
+                if (world.projectiles[i].id == id) {
+                    world.projectiles.splice(i, 1);
                 }
             }
     }
