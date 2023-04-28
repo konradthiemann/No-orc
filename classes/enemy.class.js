@@ -95,4 +95,14 @@ class Enemy extends MovableObject{
             world.hearts.push(newHeart);
         }
     }
+
+    removeObject(object) {
+        setTimeout(() => {
+            for (let i = 0; i < world.enemies.length; i++) {
+                if (world.enemies[i] === object) {
+                    world.enemies.splice(i, 1);
+                }
+            }
+        }, 3000);
+    }
 }

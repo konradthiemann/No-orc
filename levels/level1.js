@@ -177,8 +177,8 @@ const level1 = new Level(
         new Bird(),
     ],
     [
-        // new EnemyOne(),
-        // new EnemyTwo(),
+        new EnemyOne(),
+        new EnemyTwo(),
         // new EnemyTwo(),
         // new EnemyTwo(),
         // new EnemyTwo(),

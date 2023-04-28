@@ -1,16 +1,9 @@
-class MovableObject {
-    x;
-    y;
-    img;
+class MovableObject extends DrawableObject{
+
     imgCache = {};
     speed;
     otherDirection = false;
     currentIMG = 0;
-
-    loadImage(path) {
-        this.img = new Image();
-        this.img.src = path;
-    }
 
     loadImages(arr) {
         arr.forEach((path) => {
@@ -18,11 +11,6 @@ class MovableObject {
             img.src = path;
             this.imgCache[path] = img;
         });
-    }
-
-    draw(ctx) {
-        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
-        this.drawFrame(ctx);
     }
 
     drawFrame(ctx) {
@@ -161,15 +149,7 @@ class MovableObject {
         this.x = this.x - this.speed;
     }
 
-    removeObject(object) {
-        setTimeout(() => {
-            for (let i = 0; i < world.enemies.length; i++) {
-                if (world.enemies[i] === object) {
-                    world.enemies.splice(i, 1);
-                }
-            }
-        }, 3000);
-    }
+    
 
     removeProjectile(id) {
             for (let i = 0; i < world.projectiles.length; i++) {

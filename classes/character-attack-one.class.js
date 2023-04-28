@@ -1,7 +1,7 @@
 class AttackOne extends MovableObject {
     height = 50;
     width = 50;
-    speed = 5;
+    speed = 15;
     animationImageCounter = 0;
     otherDirection = false;
     projectileDistance = 0;
