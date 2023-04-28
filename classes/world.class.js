@@ -10,6 +10,11 @@ class World {
     enemies = level1.enemies;
     projectiles = level1.projectiles;
     hearts = level1.hearts;
+    
+    hpBarBackground = healthBar.hpBarBackground;
+    hpPoints = healthBar.hpPoint;
+    hpBarFront = healthBar.hpBarFront;
+
     canvas;
     keyboard;
     camera_x = 0;
@@ -93,7 +98,10 @@ class World {
         this.addObjectToMap(this.enemies);
         this.addObjectToMap(this.projectiles);
         
-
+        this.ctx.translate(-this.camera_x, 0);
+        this.addObjectToMap(this.hpBarBackground);
+        this.addObjectToMap(this.hpBarFront);
+        this.ctx.translate(this.camera_x, 0);
 
         this.ctx.translate(-this.camera_x, 0);
 
