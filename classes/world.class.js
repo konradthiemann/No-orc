@@ -10,16 +10,21 @@ class World {
     enemies = level1.enemies;
     projectiles = level1.projectiles;
     hearts = level1.hearts;
-    
-    hpBarBackground = healthBar.hpBarBackground;
-    hpPoints = healthBar.hpPoint;
-    hpBarFront = healthBar.hpBarFront;
+
+    hpBarBackground = healthBar.barBackground;
+    hpPoints = healthBar.point;
+    hpBarFront = healthBar.barFront;
+
+    manaBarBackground = manaBar.barBackground;
+    manaPoints = manaBar.point;
+    manaBarFront = manaBar.barFront;
 
     canvas;
     keyboard;
     camera_x = 0;
     amountOfDeadEnemys = 0;
     bossSpawned = false;
+    characterIsFalling = false;
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -39,29 +44,26 @@ class World {
         setInterval(() => {
             this.enemies.forEach((enemy) => {
                 if (this.character.isColliding(enemy)) {
-                    console.log('colliding with enemy')
+
                     enemy.isColliding = true;
                     let jumpOnEnemy = this.checkHeightOnCollision();
 
-                    if (enemy.attackAnimationStarted == false && jumpOnEnemy == false && enemy.dyingAnimationStarted == false) {
+                    if (enemy.attackAnimationStarted == false && jumpOnEnemy == false && enemy.dyingAnimationStarted == false && this.character.dyingAnimationStarted == false && enemy.hurtAnimationStarted == false && enemy.fallingDown == false) {
                         enemy.attackAnimationStarted = true;
                         enemy.attack(enemy.enemyId);
-                        this.character.hurt();
+                        this.character.hurt(10);
                     }
 
-                    if (enemy.dyingAnimationStarted == false && jumpOnEnemy == true) {
-                        enemy.dyingAnimationStarted = true;
-                        this.amountOfDeadEnemys++;
-                        enemy.die(enemy.enemyId);  
+                    if (enemy.dyingAnimationStarted == false && jumpOnEnemy == true && enemy.hurtAnimationStarted == false) {
+                        enemy.hurt(enemy.enemyId, 50);
                         this.character.jumpAnimationCounter = 0;
                         this.character.highJumpAnimationCounter = 0;
                         this.character.highJumpAnimationSet = true;
                         this.character.jump();
-                        
+
                     }
-                }else {
-                        enemy.isColliding = false;
-                        enemy.checkEnemyDead(enemy);
+                } else {
+                    enemy.isColliding = false;
                 }
             });
         }, 20);
@@ -69,7 +71,16 @@ class World {
         setInterval(() => {
             this.hearts.forEach(heart => {
                 if (this.character.isColliding(heart)) {
-                    console.log('colliging with heart');
+                    if (world.character.health >= 57) {
+                        world.character.health = 87;
+                    } else {
+                        world.character.health = world.character.health + 30;
+                    }
+                    for (let i = 0; i < world.hearts.length; i++) {
+                        if (heart === world.hearts[i]) {
+                            world.hearts.splice(i, 1);
+                        }
+                    }
                 }
             });
         }, 20);
@@ -97,10 +108,14 @@ class World {
         this.addToMap(this.character);
         this.addObjectToMap(this.enemies);
         this.addObjectToMap(this.projectiles);
-        
+
         this.ctx.translate(-this.camera_x, 0);
         this.addObjectToMap(this.hpBarBackground);
+        this.addObjectToMap(this.hpPoints);
         this.addObjectToMap(this.hpBarFront);
+        this.addObjectToMap(this.manaBarBackground);
+        this.addObjectToMap(this.manaPoints);
+        this.addObjectToMap(this.manaBarFront);
         this.ctx.translate(this.camera_x, 0);
 
         this.ctx.translate(-this.camera_x, 0);
@@ -131,8 +146,17 @@ class World {
 
     createEnemy() {
         setInterval(() => {
-            let newOrc
-            if (( world.enemies.lenghs < 20) && this.bossSpawned == false) {
+
+            let newOrc;
+            if (this.bossSpawned == false && this.amountOfDeadEnemys >= 5) {
+                this.bossSpawned = true;
+                setTimeout(() => {
+                    let newOrc = new EnemyBoss;
+                    this.enemies.push(newOrc);
+                }, 3000);
+                this.changeWorld();
+
+            } else if ((world.enemies.length < 10) && this.bossSpawned == false) {
                 let rng = Math.random();
                 if (rng < 0.5) {
                     newOrc = new EnemyOne();
@@ -140,25 +164,26 @@ class World {
                     newOrc = new EnemyTwo();
                 }
                 this.enemies.push(newOrc);
-            }else if (this.bossSpawned == false && this.amountOfDeadEnemys >= 1){
-                this.bossSpawned = true;
-                let newOrc = new EnemyBoss;
-                this.enemies.push(newOrc);
-
-                this.changeWorld();
             }
         }, 5000);
     }
 
-    changeWorld(){
-        this.backgroundObjects.forEach((backgroundObject) => {    
+    changeWorld() {
+        this.characterIsFalling = true;
+        this.character.loadImage('./img/Mage/Jump/jump6.png');
+        this.enemies.forEach(enemy => {
+            enemy.fallingDown = true;
+            enemy.loadImage(enemy.fallingDownImage);
+        });
+
+        this.backgroundObjects.forEach((backgroundObject) => {
             setInterval(() => {
                 backgroundObject.y -= 6;
             }, 20);
         }
         );
 
-        this.backgroundObjectsHell.forEach((backgroundObject) => {    
+        this.backgroundObjectsHell.forEach((backgroundObject) => {
             let moveNewBackground = setInterval(() => {
                 backgroundObject.y -= 6;
                 if (backgroundObject.y < 0) {
@@ -169,15 +194,32 @@ class World {
         }
         );
 
+        this.tileObjectsHell.forEach((backgroundObject) => {
+            let moveNewBackground = setInterval(() => {
+                backgroundObject.y -= 6;
+                if (backgroundObject.y < 420) {
+                    backgroundObject.y = 420;
+                    this.character.loadImage('./img/Mage/Idle/idle1.png');
+                    this.characterIsFalling = false;
+                    this.enemies.forEach(enemy => {
+                        enemy.fallingDown = false;
+                        // enemy.loadImage(enemy.fallingDownImage);
+                    });
+                    clearInterval(moveNewBackground);
+                }
+            }, 20);
+        }
+        );
+
         this.tileObjects.forEach((TileObject) => {
-            let timeout = Math.random() * 2000;
+            let timeout = Math.random() * 500;
             setTimeout(() => {
                 setInterval(() => {
-                    TileObject.y += 1;
+                    TileObject.y += 2;
                 }, 20);
             }, timeout);
         });
-        
+
     }
 
     flipImage(mo) {

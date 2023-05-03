@@ -2,7 +2,9 @@ class EnemyTwo extends Enemy{
     height = 100;
     width = 100;
     y = 350;
+    currentIMG = 0;
     enemyId;
+    fallingDownImage = './img/Goblin/Falling Down/0_Goblin_Falling Down_000.png';
     IMAGES_WALK = [
         './img/Goblin/Walking/0_Goblin_Walking_000.png',
         './img/Goblin/Walking/0_Goblin_Walking_001.png',
@@ -59,26 +61,35 @@ class EnemyTwo extends Enemy{
         './img/Goblin/Dying/0_Goblin_Dying_013.png',
         './img/Goblin/Dying/0_Goblin_Dying_014.png',
     ];
-    currentIMG = 0;
+    IMAGES_HURT = [
+        './img/Goblin/Hurt/0_Goblin_Hurt_000.png',
+        './img/Goblin/Hurt/0_Goblin_Hurt_001.png',
+        './img/Goblin/Hurt/0_Goblin_Hurt_002.png',
+        './img/Goblin/Hurt/0_Goblin_Hurt_003.png',
+        './img/Goblin/Hurt/0_Goblin_Hurt_004.png',
+        './img/Goblin/Hurt/0_Goblin_Hurt_005.png',
+        './img/Goblin/Hurt/0_Goblin_Hurt_006.png',
+        './img/Goblin/Hurt/0_Goblin_Hurt_007.png',
+        './img/Goblin/Hurt/0_Goblin_Hurt_008.png',
+        './img/Goblin/Hurt/0_Goblin_Hurt_009.png',
+        './img/Goblin/Hurt/0_Goblin_Hurt_010.png',
+        './img/Goblin/Hurt/0_Goblin_Hurt_011.png',
+    ];
 
     constructor(){
         super().loadImage('./img/Goblin/Walking/0_Goblin_Walking_000.png');
         this.loadImages(this.IMAGES_WALK);
         this.loadImages(this.IMAGES_ATTACK);
         this.loadImages(this.IMAGES_DYING);
+        this.loadImages(this.IMAGES_HURT);
 
         this.enemyId = this.createID();
 
         this.x = 200 + Math.random() * 1800;
         this.speed = 1 + Math.random() * 0.5;
         
-        this.enemyTwoRun();
+        this.enemyRun();
+        this.checkEnemyDead();
     }
 
-    enemyTwoRun(){
-        
-        setInterval(() => {
-            this.chooseDirection();
-        }, 50);
-    }
 }
