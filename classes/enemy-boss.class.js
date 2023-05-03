@@ -1,4 +1,5 @@
-class EnemyBoss extends Enemy{
+class EnemyBoss extends Enemy {
+    health = 500;
     height = 170;
     width = 170;
     x = 300;
@@ -94,26 +95,28 @@ class EnemyBoss extends Enemy{
         './img/endboss/Throwing/0_Reaper_Man_Throwing_011.png',
     ];
 
-    constructor(){
+    constructor() {
         super().loadImage('./img/endboss/Walking/0_Reaper_Man_Walking_000.png');
         this.loadImages(this.IMAGES_WALK);
         this.loadImages(this.IMAGES_ATTACK);
         this.loadImages(this.IMAGES_DYING);
         this.loadImages(this.IMAGES_THROW);
+        this.loadImages(this.IMAGES_HURT);
 
         this.enemyBossRun();
+        this.checkEnemyDead();
     }
 
-    enemyBossRun(){
+    enemyBossRun() {
         let run = setInterval(() => {
             this.chooseDirection();
         }, 20);
 
         let checkForRange = setInterval(() => {
-            let distanceOne = (world.character.x + this.width/2) - (this.x + this.width/2);
-           
-            if ((distanceOne < - 300 && distanceOne > - 400 || distanceOne > 300 && distanceOne < 400) && this.rangeAttackStarted == false) {
-                
+            let distanceOne = (world.character.x + this.width / 2) - (this.x + this.width / 2);
+
+            if ((distanceOne < - 150 && distanceOne > - 400 || distanceOne > 150 && distanceOne < 400) && this.rangeAttackStarted == false && this.enemyIsDead == false && this.hurtAnimationStarted == false) {
+
                 clearInterval(run);
                 this.rangeAttack();
                 clearInterval(checkForRange);
@@ -121,35 +124,35 @@ class EnemyBoss extends Enemy{
         }, 3000);
     }
 
-    rangeAttack(){
-        console.log('RangeAttack');
+    rangeAttack() {
         this.rangeAttackStarted = true;
         this.attackImageCount = 0;
 
-            let animationRangeAttack = setInterval(() => {
-            
-                let path = this.IMAGES_THROW[this.attackImageCount];
-                this.img = this.imgCache[path];
+        let animationRangeAttack = setInterval(() => {
 
-                if (this.hurtAnimationStarted == true) {
-                    this.loadImage('./img/endboss/Walking/0_Reaper_Man_Walking_000.png');
-                    clearInterval(animationRangeAttack);
-                }
-                if (this.attackImageCount == 6) {     
-                    let x = this.x + (this.width/2);
-                    let y = this.y + (this.height/2);
-                    world.projectiles.push(new BossRangeAttack(x, y, this.otherDirection));
-                    console.log(world.projectiles);
-                }
+            let path = this.IMAGES_THROW[this.attackImageCount];
+            this.img = this.imgCache[path];
 
-                if (this.attackImageCount == this.IMAGES_THROW.length) {                                 
-                    this.loadImage('./img/endboss/Walking/0_Reaper_Man_Walking_000.png'); 
-                    this.rangeAttackStarted = false; 
-                    this.enemyBossRun();
-                    clearInterval(animationRangeAttack);
-                }
+            if (this.hurtAnimationStarted == true) {
+                this.loadImage('./img/endboss/Walking/0_Reaper_Man_Walking_000.png');
+                this.rangeAttackStarted = false;
+                this.enemyBossRun();
+                clearInterval(animationRangeAttack);
+            }
+            if (this.attackImageCount == 6) {
+                let x = this.x + (this.width / 2);
+                let y = this.y + (this.height / 2);
+                world.projectiles.push(new BossRangeAttack(x, y, this.otherDirection));
+            }
 
-                this.attackImageCount++;
-            }, 80);
+            if (this.attackImageCount == this.IMAGES_THROW.length) {
+                this.loadImage('./img/endboss/Walking/0_Reaper_Man_Walking_000.png');
+                this.rangeAttackStarted = false;
+                this.enemyBossRun();
+                clearInterval(animationRangeAttack);
+            }
+
+            this.attackImageCount++;
+        }, 80);
     }
 }

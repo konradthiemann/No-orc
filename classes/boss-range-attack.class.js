@@ -83,7 +83,7 @@ class BossRangeAttack extends MovableObject{
         this.checkCollisionInterval = setInterval(() => {            
                 if (this.isColliding(world.character) && this.hitTarget == false) {
                     this.hitTarget = true;
-                    world.character.hurt();
+                    world.character.hurt(20);
                 }            
         }, 20);
     }

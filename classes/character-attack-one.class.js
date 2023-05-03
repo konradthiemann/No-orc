@@ -5,6 +5,7 @@ class AttackOne extends MovableObject {
     animationImageCounter = 0;
     otherDirection = false;
     projectileDistance = 0;
+    checkCollisionInterval;
     hitTarget = false;
     y = (world.character.y + world.character.height / 2 - 15);
     x = (world.character.x + world.character.width / 2);
@@ -45,19 +46,13 @@ class AttackOne extends MovableObject {
         }
     }
 
-    checkCollisionInterval;
-
     checkCollision() {
         this.checkCollisionInterval = setInterval(() => {
             world.enemies.forEach(enemy => {
                 if (this.isColliding(enemy) && this.hitTarget == false && enemy.enemyIsDead == false) {
-                    console.log('colliding with enemy');
                     this.hitTarget = true;
                     enemy.isColliding = true;
-                    enemy.dyingAnimationStarted = true;
-                    this.amountOfDeadEnemys++;
-                    enemy.enemyIsDead = true;
-                    enemy.die(enemy.enemyId);
+                    enemy.hurt(enemy.enemyId, 100);
                 }
             });
         }, 20);

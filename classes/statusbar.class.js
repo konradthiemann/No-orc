@@ -1,12 +1,12 @@
 class StatusBar {
-    hpBarBackground;
+    barBackground;
     hpCornerLeft;
-    hpPoint;
-    hpBarFront;
+    point;
+    barFront;
 
-    constructor(hpBarBackground, hpPoint, hpBarFront){
-        this.hpBarBackground = hpBarBackground;
-        this.hpPoint = hpPoint;
-        this.hpBarFront = hpBarFront;
+    constructor(barBackground, point, barFront){
+        this.barBackground = barBackground;
+        this.point = point;
+        this.barFront = barFront;
     }
 }
