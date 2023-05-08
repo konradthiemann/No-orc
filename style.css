@@ -1,9 +1,120 @@
-body{
+body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-image: url('./img/Background/PNG/game_background_4/game_background_4.png');
+    font-family: 'Press Start 2P';
 }
 
-canvas{
+h1 {
+    color: wheat;
+}
+
+h2{
+    position: absolute;
+    font-size: 18px;
+    top: 100px;
+}
+
+canvas {
     background-color: black;
+}
+
+.startScreen {
+    width: 720px;
+    height: 480px;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    top: 88px;
+}
+
+.startScreen img {
+    width: 720px;
+    height: 480px;
+}
+
+.soundSelection {
+    flex-direction: column;
+    width: 720px;
+    height: 480px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 88px;
+    z-index: 2;
+    font-size: 18px;
+    color: #505739;
+    background-image: url(./img/game-ui/PNG/05ogin&pass/beige_border2.png);
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.soundSelection img {
+    width: 720px;
+    height: 480px;
+}
+
+.soundSelection button {
+    font-family: 'Press Start 2P';
+    box-shadow: 0px 1px 0px 0px #1c1b1898;
+    background: linear-gradient(to bottom, #eae0c2 5%, #ccc2a6 100%);
+    background-color: #eae0c2;
+    border-radius: 15px;
+    border: 2px solid #3330295b;
+    display: inline-block;
+    cursor: pointer;
+    color: #505739;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 22px 40px;
+    margin: 50px 25px;
+    text-decoration: none;
+    text-shadow: 0px 1px 0px #ffffff;
+}
+
+.soundSelection button:hover {
+    background: linear-gradient(to bottom, #ccc2a6 5%, #eae0c2 100%);
+    background-color: #ccc2a6;
+}
+
+.soundSelection button:active {
+    position: relative;
+    top: 1px;
+}
+
+.btnContainer{
+    display: flex;
+}
+
+/* victory screen */
+
+.victoryScreen {
+    width: 720px;
+    height: 480px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    top: -480px;
+    z-index: 2;
+}
+
+.victoryScreen p {
+    top: 350px;
+    position: absolute;
+}
+
+.victoryScreen img {
+    width: 720px;
+    height: 480px;
+    display: flex;
+}
+
+.victoryScreen h2 {
+    font-size: 27px;
+    top: 27px;
 }

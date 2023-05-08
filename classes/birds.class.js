@@ -1,4 +1,4 @@
-class Bird extends MovableObject{
+class Bird extends MovableObject {
     height = 50;
     width = 50;
     calcBirdSize;
@@ -12,30 +12,50 @@ class Bird extends MovableObject{
     ];
     currentIMG = 0;
 
-    constructor(){
+    constructor() {
         super().loadImage('./img/Background/Bright/Bird/frame1.png');
-        this.loadImages(this.IMAGES_FLY)
-        this.x = (Math.random() * 3000) - 200;
-        this.y = Math.random() * 400;
-
-        this.calcBirdSize = Math.random() * 20 + 50;
-        this.height = this.calcBirdSize;
-        this.width = this.calcBirdSize;
-
-        let randomDirection = Math.random();
-
-        if (randomDirection >= 0.5) {
-           this.direction = -8; 
-           this.otherDirection = true;
-        }else{
-            this.direction = +8;
-            this.otherDirection = false;
-        }
-        
+        this.loadImages(this.IMAGES_FLY);
+        this.calculateBirdLocation();
+        this.calculateBirdSize();
+        this.choseRandomDirection();
         this.moveBird();
     }
 
+    /**
+    * calculate the starting point for new bird element
+    */
+    calculateBirdLocation() {
+        this.x = (Math.random() * 3000) - 200;
+        this.y = Math.random() * 200;
+    }
 
+    /**
+    * calculate width and height for new bird element
+    */
+    calculateBirdSize() {
+        this.calcBirdSize = Math.random() * 20 + 50;
+        this.height = this.calcBirdSize;
+        this.width = this.calcBirdSize;
+    }
+
+    /**
+    * choose flying direction
+    */
+    choseRandomDirection() {
+        let randomDirection = Math.random();
+
+        if (randomDirection >= 0.5) {
+            this.direction = -8;
+            this.otherDirection = true;
+        } else {
+            this.direction = +8;
+            this.otherDirection = false;
+        }
+    }
+
+    /**
+    * animate bird
+    */
     moveBird() {
         let increment = 1;
         setInterval(() => {
@@ -49,7 +69,7 @@ class Bird extends MovableObject{
             }
             let path = this.IMAGES_FLY[i];
             this.img = this.imgCache[path];
-    
+
             this.currentIMG = i;
             this.x = this.x - this.direction;
         }, 100);

@@ -1,15 +1,12 @@
-class BossRangeAttack extends MovableObject{
+class BossRangeAttack extends MovableObject {
     height = 50;
     width = 50;
     speed = 20;
-    animationImageCounter = 0;
-    otherDirection = false;
-    projectileDistance = 0;
     hitTarget = false;
     x;
     y;
     checkCollisionInterval;
-    id;
+    electric_sound = new Audio('./audio/electric-spark.mp3');
     IMAGES_ATTACK = [
         './img/magic-effects/tesla_ball/tesla_ball1.png',
         './img/magic-effects/tesla_ball/tesla_ball2.png',
@@ -30,21 +27,31 @@ class BossRangeAttack extends MovableObject{
         './img/magic-effects/tesla_ball/tesla_ball17.png',
     ];
 
-    constructor(x, y, od){
+    constructor(x, y, od) {
         super().loadImage('./img/magic-effects/tesla_ball/tesla_ball1.png');
         this.loadImages(this.IMAGES_ATTACK);
         this.getID();
+        this.setStartingPoint(x, y);
+        this.chooseDirection(od);
+        this.animateAttack();
+        this.checkCollision();
+        playSound(this.electric_sound, false);
+    }
+
+    /**
+     * set spawning location coordinates
+     * @param {*} x 
+     * @param {*} y 
+     */
+    setStartingPoint(x, y) {
         this.x = x;
         this.y = y;
-        this.chooseDirection(od);
-        this.moveAttack();
-        this.checkCollision();
     }
 
-    getID(){
-        this.id = Math.random() * 100000;
-    }
-
+    /**
+    * choose direction for flying animation
+    * @param od 
+    */
     chooseDirection(od) {
         if (od == true) {
             this.otherDirection = true;
@@ -53,38 +60,15 @@ class BossRangeAttack extends MovableObject{
         }
     }
 
-    moveAttack() {
-        let animateBossRangeAttack = setInterval(() => {
-            let path = this.IMAGES_ATTACK[this.animationImageCounter];
-            this.img = this.imgCache[path];
-
-            if (this.otherDirection == true) {
-                this.x = (this.x - this.projectileDistance);
-                this.moveLeft();
-            }
-
-            if (this.otherDirection == false) {
-                this.x = (this.x + this.projectileDistance);
-                this.moveRight();
-            }
-
-            if (this.animationImageCounter == this.IMAGES_ATTACK.length) {
-                this.removeProjectile(this.id);
-                clearInterval(animateBossRangeAttack);
-                clearInterval(this.checkCollisionInterval);
-            }
-
-            this.projectileDistance ++;
-            this.animationImageCounter++;
-        }, 1000 / 20);
-    }
-
+    /**
+    * check if projectile is colliding character, deals damage to character
+    */
     checkCollision() {
-        this.checkCollisionInterval = setInterval(() => {            
-                if (this.isColliding(world.character) && this.hitTarget == false) {
-                    this.hitTarget = true;
-                    world.character.hurt(20);
-                }            
+        this.checkCollisionInterval = setInterval(() => {
+            if (this.isColliding(world.character) && this.hitTarget == false) {
+                this.hitTarget = true;
+                world.character.hurt(20);
+            }
         }, 20);
     }
 }

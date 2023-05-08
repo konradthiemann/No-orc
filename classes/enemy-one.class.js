@@ -3,7 +3,6 @@ class EnemyOne extends Enemy {
     width = 100;
     y = 350;
     autoAttackDmg = 0.5;
-    enemyId;
     fallingDownImage = './img/Orc/Falling Down/0_Orc_Falling Down_000.png';
     IMAGES_WALK = [
         './img/Orc/Walking/0_Orc_Walking_000.png',
@@ -85,7 +84,7 @@ class EnemyOne extends Enemy {
         this.loadImages(this.IMAGES_DYING);
         this.loadImages(this.IMAGES_HURT);
 
-        this.enemyId = this.createID();
+        this.getID();
         this.x = 200 + Math.random() * 1800;
         this.speed = 1 + Math.random() * 0.5;
 
