@@ -10,6 +10,9 @@ class Enemy extends MovableObject {
     hurtAnimationStarted = false;
     fallingDown = false;
 
+    chop_sound = new Audio('./audio/chop.mp3');
+    dying_sound = new Audio('./audio/orc-dying.mp3');
+
     enemyRun() {
         setInterval(() => {
             this.chooseDirection();
@@ -36,7 +39,7 @@ class Enemy extends MovableObject {
 
     attack(enemy) {
         let attackImageCount = 0;
-        
+
         let enemyAttack = setInterval(() => {
 
             let path = this.IMAGES_ATTACK[attackImageCount];
@@ -53,9 +56,7 @@ class Enemy extends MovableObject {
                 this.loadImage(this.IMAGES_ATTACK[0]);
                 clearInterval(enemyAttack);
             }
-
             attackImageCount++;
-
         }, 60);
     }
 
@@ -67,17 +68,23 @@ class Enemy extends MovableObject {
     }
 
     die(enemyId) {
+        if (soundMuted == false) {
+            this.dying_sound.play();
+        }
         this.dyingAnimationStarted = true;
         world.amountOfDeadEnemys++;
         for (let i = 0; i < world.enemies.length; i++) {
-            if (enemyId == world.enemies[i].enemyId) {
+            if (enemyId == world.enemies[i].id) {
                 let enemyDying = setInterval(() => {
                     let path = this.IMAGES_DYING[this.dyingImageCount];
                     this.img = this.imgCache[path];
                     if (this.dyingImageCount == this.IMAGES_DYING.length) {
+                        if (soundMuted == false) {
+                            this.dying_sound.pause();
+                        }
                         this.enemyIsDead = true;
                         this.loadImage(this.IMAGES_DYING[this.IMAGES_DYING.length - 1]);
-                        this.dropHeart(this.x + this.width/2 , 400);
+                        this.dropHeart(this.x + this.width / 2, 400);
                         clearInterval(enemyDying);
                     }
                     this.dyingImageCount++;
@@ -94,7 +101,7 @@ class Enemy extends MovableObject {
             let EnemyHurt = setInterval(() => {
                 let path = this.IMAGES_HURT[hurtImageCount];
                 this.img = this.imgCache[path];
-                if (hurtImageCount == this.IMAGES_HURT.length) {
+                if (hurtImageCount == this.IMAGES_HURT.length || world.characterIsFalling == true) {
                     this.hurtAnimationStarted = false;
                     hurtImageCount = 0;
                     this.loadImage(this.IMAGES_WALK[1]);
@@ -110,11 +117,16 @@ class Enemy extends MovableObject {
 
     checkEnemyDead() {
         setInterval(() => {
+            if (this.enemyIsDead && this instanceof EnemyBoss) {
+                gameStarted = false;
+                showVictoryScreen();
+                this.removeObject(this);
+            }
             if (this.enemyIsDead == true) {
                 this.removeObject(this);
             }
         }, 3000);
-        
+
     }
 
     createID() {

@@ -114,9 +114,7 @@ class EnemyBoss extends Enemy {
 
         let checkForRange = setInterval(() => {
             let distanceOne = (world.character.x + this.width / 2) - (this.x + this.width / 2);
-
-            if ((distanceOne < - 150 && distanceOne > - 400 || distanceOne > 150 && distanceOne < 400) && this.rangeAttackStarted == false && this.enemyIsDead == false && this.hurtAnimationStarted == false) {
-
+            if ((distanceOne < - 150 && distanceOne > - 400 || distanceOne > 150 && distanceOne < 400) && this.rangeAttackStarted == false && this.enemyIsDead == false && this.hurtAnimationStarted == false && this.dyingAnimationStarted == false) {
                 clearInterval(run);
                 this.rangeAttack();
                 clearInterval(checkForRange);

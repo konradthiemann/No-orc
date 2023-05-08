@@ -1,4 +1,4 @@
-class Character extends MovableObject{
+class Character extends MovableObject {
     world;
     health = 87;
     mana = 87;
@@ -22,6 +22,12 @@ class Character extends MovableObject{
     attackAnimationStarted = false;
     manaIntervalSet = false;
     dyingAnimationStarted = false;
+    characterIsDead = false;
+
+    walking_sound = new Audio('./audio/walking-sound.mp3');
+    jumping_sound = new Audio('./audio/jumping.mp3');
+    hurt_sound = new Audio('./audio/character-hurt.mp3');
+    jump_on_enemy_sound = new Audio('./audio/punch-boss.mp3');
 
     hpCornerLeft = './img/game-ui/PNG/16Inner_Interface/hp_corner1.png';
     hpPoint = './img/game-ui/PNG/16Inner_Interface/hp_point.png';
@@ -64,7 +70,7 @@ class Character extends MovableObject{
         './img/Mage/Jump/jump5.png',
         './img/Mage/Jump/jump6.png',
         './img/Mage/Jump/jump6.png',
-        './img/Mage/Jump/jump7.png',
+        './img/Mage/Jump/jump6.png',
     ];
     IMAGES_HIGH_JUMPING = [
         './img/Mage/High_Jump/high_jump5.png',
@@ -103,7 +109,7 @@ class Character extends MovableObject{
         './img/Mage/Death/death10.png',
     ];
 
-    constructor(){
+    constructor() {
         super().loadImage('./img/Mage/Idle/idle1.png');
         this.loadImages(this.IMAGES_RUN);
         this.loadImages(this.IMAGES_IDLE);
@@ -114,136 +120,180 @@ class Character extends MovableObject{
         this.loadImages(this.IMAGES_DYING);
         this.applyGravity();
         this.characterRun();
+        this.checkForIdle();
+        this.chooseJumpAnimation();
         this.setHealthPoints();
         this.setManaPoints();
     }
 
-    applyGravity(){
+    applyGravity() {
         setInterval(() => {
             if (this.isAboveGround() || this.speedY > 0) {
                 this.y -= this.speedY;
-                this.speedY -=this.acceleration;
-                if (this.y >= 300) {
-                    this.speedY = 0;
-                    this.y = 306;
-                }
+                this.speedY -= this.acceleration;
+                this.setCharacterOnGround();
             }
-            if(!this.isAboveGround()){
-                this.jumpAnimationCounter = 0;
-                this.highJumpAnimationCounter = 0;
-                this.highJumpAnimationSet = false;
-                this.jumpCounter = 0;
+            if (!this.isAboveGround()) {
+                this.resetJumpCounter();
             }
         }, 20);
     }
 
-    isAboveGround(){
+    setCharacterOnGround() {
+        if (this.y >= 300) {
+            this.speedY = 0;
+            this.y = 306;
+        }
+    }
+
+    resetJumpCounter() {
+        this.jumpAnimationCounter = 0;
+        this.highJumpAnimationCounter = 0;
+        this.highJumpAnimationSet = false;
+        this.jumpCounter = 0;
+    }
+
+    isAboveGround() {
         return this.y < 299;
     }
 
-    characterRun(){
+    characterRun() {
         setInterval(() => {
-            if (keyboard.LEFT == false && keyboard.RIGHT == false && this.idleImageCount == 0 && !this.isAboveGround() && this.hurtAnimationStarted == false && this.attackAnimationStarted == false && this.dyingAnimationStarted == false && (this.health > 0) && world.characterIsFalling == false) {
-                this.loadImage('./img/Mage/Idle/idle1.png');
-            }
-
-            if (keyboard.LEFT == true) {
-                if (this.x >= -20) {
-                    this.moveLeft();
-                }
-                this.otherDirection = true;
-                this.thresholdReached = 0;
-            }
-
-            if (keyboard.RIGHT == true) {
-                if (this.x <= 2140) {
-                   this.moveRight();
-                }
-                this.otherDirection = false;
-                this.thresholdReached = 1;
-            }
-
-            if ((keyboard.UP == true  && !this.isAboveGround()) || (keyboard.UP == true  && this.jumpCounter == 1 && this.speedY < 0)) {
-                if (this.jumpCounter == 1) {
-                    this.highJumpAnimationSet = true;
-                }
-                this.jump();
-            }
-
-            if (keyboard.SPACE == true  && !this.isAboveGround() || (keyboard.SPACE == true  && this.jumpCounter == 1 && this.speedY < 0)) {
-                if (this.jumpCounter == 1) {
-                    this.highJumpAnimationSet = true;
-                }
-                this.jump();
-            }
-
-            if (keyboard.X == true && this.attackAnimationStarted == false && this.hurtAnimationStarted == false && this.dyingAnimationStarted == false && world.characterIsFalling == false) {
-                this.attackAnimationStarted = true;
-                this.attackOne();
-            }
-
-            if (this.x + this.world.camera_x <= 100  && this.thresholdReached !== 1 && this.x >= 100) {
-                this.world.camera_x = -this.x + 101;
-                this.thresholdReached = true;
-            }
-            if (this.x + this.world.camera_x >= 350  && this.thresholdReached == 1 && this.x <= 2000) {
-                this.world.camera_x = -this.x + 351;
-                this.thresholdReached = true;
-            }
-            
+            this.pauseWalkingSound();
+            this.choseDirection();
+            this.checkForJumping();
+            this.checkForPossibleAttack();
+            this.moveWorldCamera();
         }, 1000 / 60);
+    }
 
-        setInterval(() => {
-            if (this.isAboveGround() && (this.jumpAnimationCounter < this.IMAGES_JUMPING.length) &&  this.highJumpAnimationSet == false && world.characterIsFalling == false) { 
-                this.jumpCounter = 1;
-                let path = this.IMAGES_JUMPING[this.jumpAnimationCounter];
-                this.img = this.imgCache[path];
-
-                this.currentIMG ++; 
-                this.jumpAnimationCounter ++;
+    choseDirection(){
+        if (keyboard.LEFT == true) {
+            if (this.x >= -20) {
+                this.playWalkingSound();
+                this.moveLeft();
             }
-            else if (this.isAboveGround() && (this.highJumpAnimationCounter < this.IMAGES_HIGH_JUMPING.length) &&  this.highJumpAnimationSet == true && world.characterIsFalling == false) { 
-                this.jumpCounter = 2;
-                let path = this.IMAGES_HIGH_JUMPING[this.highJumpAnimationCounter];
-                this.img = this.imgCache[path];
+            this.otherDirection = true;
+            this.thresholdReached = 0;
+        }
 
-                this.currentIMG ++; 
-                this.highJumpAnimationCounter ++;
-            }else{
-                if ((keyboard.RIGHT == true || keyboard.LEFT == true) && !this.isAboveGround() && this.attackAnimationStarted == false && world.characterIsFalling == false) {
-                    this.playAnimation(this.IMAGES_RUN);
-                }
+        if (keyboard.RIGHT == true) {
+            if (this.x <= 2140) {
+                this.playWalkingSound();
+                this.moveRight();
+            }
+            this.otherDirection = false;
+            this.thresholdReached = 1;
+        }
+    }
+
+    playWalkingSound(){
+        if (!this.isAboveGround() && soundMuted == false) {
+            this.walking_sound.play();
+        }
+    }
+
+    pauseWalkingSound(){
+        if (soundMuted == false && (this.isAboveGround() || this.speedY > 0)) {
+            this.walking_sound.pause();
+        }
+    }
+
+    checkForJumping(){
+        if (((keyboard.UP == true || keyboard.SPACE == true) && !this.isAboveGround()) || (keyboard.UP == true && this.jumpCounter == 1 && this.speedY < 0)) {
+            this.setHighJumpAnimation();
+            playSound(this.jumping_sound, false);
+            this.jump();
+        }
+    }
+
+    setHighJumpAnimation() {
+        if (this.jumpCounter == 1) {
+            this.highJumpAnimationSet = true;
+        }
+    }
+
+    checkForPossibleAttack() {
+        if (keyboard.X == true && this.attackAnimationStarted == false && this.hurtAnimationStarted == false && this.dyingAnimationStarted == false && world.characterIsFalling == false) {
+            this.attackAnimationStarted = true;
+            this.attackOne();
+        }
+    }
+
+    moveWorldCamera() {
+        if (this.x + this.world.camera_x <= 220 && this.thresholdReached !== 1 && this.x >= 220) {
+            this.world.camera_x = -this.x + 221;
+            this.thresholdReached = true;
+        }
+        if (this.x + this.world.camera_x >= 350 && this.thresholdReached == 1 && this.x <= 2000) {
+            this.world.camera_x = -this.x + 351;
+            this.thresholdReached = true;
+        }
+    }
+
+    chooseJumpAnimation() {
+        setInterval(() => {
+            if (this.isAboveGround() && (this.jumpAnimationCounter < this.IMAGES_JUMPING.length) && this.highJumpAnimationSet == false && world.characterIsFalling == false) {
+                this.animateJump();
+            }
+            else if (this.isAboveGround() && (this.highJumpAnimationCounter < this.IMAGES_HIGH_JUMPING.length) && this.highJumpAnimationSet == true && world.characterIsFalling == false) {
+                this.animateHighJump();
+            }
+            else if ((keyboard.RIGHT == true || keyboard.LEFT == true) && !this.isAboveGround() && this.attackAnimationStarted == false && world.characterIsFalling == false) {
+                this.playAnimation(this.IMAGES_RUN);
             }
         }, 80);
+    }
 
+    animateJump() {
+        this.jumpCounter = 1;
+        let path = this.IMAGES_JUMPING[this.jumpAnimationCounter];
+        this.img = this.imgCache[path];
+        this.currentIMG++;
+        this.jumpAnimationCounter++;
+    }
+
+    animateHighJump() {
+        this.jumpCounter = 2;
+        let path = this.IMAGES_HIGH_JUMPING[this.highJumpAnimationCounter];
+        this.img = this.imgCache[path];
+        this.currentIMG++;
+        this.highJumpAnimationCounter++;
+    }
+
+    checkForIdle() {
         setInterval(() => {
-            
-            if (keyboard.RIGHT == false && keyboard.LEFT == false && this.idleIntervalSet == false && !this.isAboveGround() && this.hurtAnimationStarted == false && this.attackAnimationStarted == false && this.dyingAnimationStarted == false && (this.health > 0) && world.characterIsFalling == false) {
+            if (keyboard.RIGHT == false && keyboard.LEFT == false && this.idleIntervalSet == false && !this.isAboveGround() && this.hurtAnimationStarted == false && this.attackAnimationStarted == false && this.dyingAnimationStarted == false && this.health > 0 && world.characterIsFalling == false) {
                 this.loadImage('./img/Mage/Idle/idle1.png');
                 this.idleIntervalSet = true;
                 let idleInterval = 3000 + Math.random() * 5000;
                 this.idleImageCount = 0;
-
-                setTimeout(() => {
-                    let idleCharacter = setInterval(() => {
-                        let path = this.IMAGES_IDLE[this.idleImageCount];
-                        this.img = this.imgCache[path];
-
-                        if ((this.idleImageCount == this.IMAGES_IDLE.length) || keyboard.LEFT == true || keyboard.RIGHT == true || keyboard.UP == true || this.hurtAnimationStarted == true || this.isAboveGround() || this.attackAnimationStarted == true || this.dyingAnimationStarted == true || (this.health <= 0) || world.characterIsFalling == true) {
-                            this.idleIntervalSet = false;
-                            this.idleImageCount = 0;
-                            this.loadImage('./img/Mage/Idle/idle1.png');
-                            clearInterval(idleCharacter);
-                        }
-
-                        this.idleImageCount++;
-                    }, 80);
-                }, idleInterval);
+                this.animateIdle(idleInterval);
             }
         }, 80);
     }
 
-    jump(){
+    animateIdle(idleInterval) {
+        setTimeout(() => {
+            let idleCharacter = setInterval(() => {
+                let path = this.IMAGES_IDLE[this.idleImageCount];
+                this.img = this.imgCache[path];
+                this.interruptIdle(idleCharacter);
+                this.idleImageCount++;
+            }, 80);
+        }, idleInterval);
+    }
+
+    interruptIdle(idleCharacter) {
+        if ((this.idleImageCount == this.IMAGES_IDLE.length) || keyboard.LEFT == true || keyboard.RIGHT == true || keyboard.UP == true || this.hurtAnimationStarted == true || this.isAboveGround() || this.attackAnimationStarted == true || this.dyingAnimationStarted == true || (this.health <= 0) || world.characterIsFalling == true) {
+            this.idleIntervalSet = false;
+            this.idleImageCount = 0;
+            this.loadImage('./img/Mage/Idle/idle1.png');
+            clearInterval(idleCharacter);
+        }
+    }
+
+    jump() {
         this.speedY = 21;
     }
 
@@ -253,110 +303,123 @@ class Character extends MovableObject{
         let characterHurt = setInterval(() => {
             let path = this.IMAGES_HURT[hurtImageCount];
             this.img = this.imgCache[path];
-                if (hurtImageCount == this.IMAGES_HURT.length) {
-                    this.hurtAnimationStarted = false;
-                    hurtImageCount = 0;
-                    this.loadImage('./img/Mage/Idle/idle1.png');
-                    this.health = this.health - dmg;
-                    clearInterval(characterHurt);
-                    this.checkLife();
-                }
+            this.stopHurtAnimation(characterHurt, hurtImageCount, dmg);
             hurtImageCount++;
         }, 100);
     }
 
-    attackOne(){
-        if (this.hurtAnimationStarted == false ) {
+    stopHurtAnimation(characterHurt, hurtImageCount, dmg){
+        if (hurtImageCount == this.IMAGES_HURT.length) {
+            this.hurtAnimationStarted = false;
+            this.loadImage('./img/Mage/Idle/idle1.png');
+            this.health = this.health - dmg;
+            clearInterval(characterHurt);
+            this.checkLife();
+        }
+    }
 
+    attackOne() {
+        if (this.hurtAnimationStarted == false && this.dyingAnimationStarted == false) {
             this.attackImageCount = 0;
-
             let animationAttackOne = setInterval(() => {
-            
                 let path = this.IMAGES_ATTACK[this.attackImageCount];
                 this.img = this.imgCache[path];
-
-                if (this.hurtAnimationStarted == true) {
-                    this.attackAnimationStarted = false;
-                    this.loadImage('./img/Mage/Idle/idle1.png');
-                    clearInterval(animationAttackOne);
-                }
-                if (this.attackImageCount == 6  && this.mana >= 20) {     
-                    world.projectiles.push(new AttackOne());
-                    this.mana = this.mana - 20;
-                }
-
-                if (this.attackImageCount == this.IMAGES_ATTACK.length) {                                 
-                    this.attackAnimationStarted = false;
-                    this.loadImage('./img/Mage/Idle/idle1.png');  
-                    clearInterval(animationAttackOne);
-                }
-
+                this.interruptAttack();
+                this.createFireball();
+                this.stopAttackAnimation(animationAttackOne);
                 this.attackImageCount++;
             }, 80);
         }
     }
 
+    interruptAttack(){
+        if (this.hurtAnimationStarted == true) {
+            this.attackAnimationStarted = false;
+            this.loadImage('./img/Mage/Idle/idle1.png');
+            clearInterval(animationAttackOne);
+        }
+    }
 
-    setHealthPoints(){
+    createFireball(){
+        if (this.attackImageCount == 6 && this.mana >= 20) {
+            world.projectiles.push(new AttackOne());
+            this.mana = this.mana - 20;
+        }
+    }
+
+    stopAttackAnimation(animationAttackOne){
+        if (this.attackImageCount == this.IMAGES_ATTACK.length) {
+            this.attackAnimationStarted = false;
+            this.loadImage('./img/Mage/Idle/idle1.png');
+            clearInterval(animationAttackOne);
+        }
+    }
+
+    setHealthPoints() {
         setInterval(() => {
             this.world.hpPoints.splice(0, this.world.hpPoints.length);
             let healthPoint = new Healthpoint(this.hpCornerLeft, 25, 23)
             this.world.hpPoints.push(healthPoint);
             for (let i = 0; i < this.health - 1; i++) {
-                
                 if (i > 0 && i < this.health - 1) {
                     let x = 25 + i * 2;
                     let healthPoint = new Healthpoint(this.hpPoint, x, 23)
                     this.world.hpPoints.push(healthPoint);
                 }
-            }    
-            let x = 23 + this.health * 2;
-            healthPoint = new Healthpoint(this.hpCornerRight, x, 23)
-            this.world.hpPoints.push(healthPoint); 
-            
-           
-        }, 20);
+            }
+            if (this.health <= 0) {
+                this.health = 0;
+                let x = 25 + this.health * 2;
+                healthPoint = new Healthpoint(this.hpCornerRight, x, 23)
+                this.world.hpPoints.push(healthPoint);
+            }
+            else {
+                let x = 23 + this.health * 2;
+                healthPoint = new Healthpoint(this.hpCornerRight, x, 23)
+                this.world.hpPoints.push(healthPoint);
+            }
+        }, 1000 / 60);
     }
 
-    checkLife(){
+    checkLife() {
         if (this.health <= 0) {
             this.die();
         }
     }
 
-    die(){
+    die() {
         this.dyingAnimationStarted = true;
         let dyingImageCount = 0;
         let dying = setInterval(() => {
             let path = this.IMAGES_DYING[dyingImageCount];
             this.img = this.imgCache[path];
-                if (dyingImageCount == this.IMAGES_DYING.length) {
-                    this.loadImage(this.IMAGES_DYING[this.IMAGES_DYING.length - 1]);
-                    dyingImageCount = 0;
-                    clearInterval(dying);
-                }
-                dyingImageCount++; 
-                }, 80);
-               
+            if (dyingImageCount == this.IMAGES_DYING.length) {
+                this.loadImage(this.IMAGES_DYING[this.IMAGES_DYING.length - 1]);
+                dyingImageCount = 0;
+                this.characterIsDead = true;
+                showLosingScreen();
+                clearInterval(dying);
+            }
+            dyingImageCount++;
+        }, 80);
     }
 
-    
-    setManaPoints(){
+    setManaPoints() {
         setInterval(() => {
             this.world.manaPoints.splice(0, this.world.manaPoints.length);
             let manaPoint = new Healthpoint(this.manaCornerLeft, 25, 50)
             this.world.manaPoints.push(manaPoint);
             for (let i = 0; i < this.mana - 1; i++) {
-                
+
                 if (i > 0 && i < this.mana - 1) {
                     let x = 25 + i * 2;
                     let manaPoint = new Healthpoint(this.manaPoint, x, 50)
                     this.world.manaPoints.push(manaPoint);
                 }
-            }    
+            }
             let x = 23 + this.mana * 2;
             manaPoint = new Healthpoint(this.manaCornerRight, x, 50)
-            this.world.manaPoints.push(manaPoint);        
+            this.world.manaPoints.push(manaPoint);
         }, 20);
 
         setInterval(() => {
@@ -367,10 +430,10 @@ class Character extends MovableObject{
                         this.manaIntervalSet = false;
                         clearInterval(setManaInterval);
                     }
-                    this.mana = this.mana + 0.5;
-                }, 100);
+                    this.mana = this.mana + 1;
+                }, 200);
             }
-        }, 20);
-        
+        }, 120);
+
     }
 }

@@ -26,6 +26,8 @@ class World {
     bossSpawned = false;
     characterIsFalling = false;
 
+    collect_heart_sound = new Audio('./audio/collect-heart.mp3');
+
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
@@ -50,15 +52,26 @@ class World {
 
                     if (enemy.attackAnimationStarted == false && jumpOnEnemy == false && enemy.dyingAnimationStarted == false && this.character.dyingAnimationStarted == false && enemy.hurtAnimationStarted == false && enemy.fallingDown == false) {
                         enemy.attackAnimationStarted = true;
-                        enemy.attack(enemy.enemyId);
+                        enemy.attack(enemy.id);
+                        if (soundMuted == false) {
+                            this.character.hurt_sound.loop = false;
+                            this.character.hurt_sound.play();
+                            enemy.chop_sound.loop = false;
+                            enemy.chop_sound.play();
+                        }
                         this.character.hurt(10);
                     }
 
                     if (enemy.dyingAnimationStarted == false && jumpOnEnemy == true && enemy.hurtAnimationStarted == false) {
-                        enemy.hurt(enemy.enemyId, 50);
-                        this.character.jumpAnimationCounter = 0;
-                        this.character.highJumpAnimationCounter = 0;
-                        this.character.highJumpAnimationSet = true;
+                        enemy.hurt(enemy.id, 50);
+                        if (soundMuted == false) {
+                            this.character.jump_on_enemy_sound.loop = false;
+                            this.character.jump_on_enemy_sound.play();
+                        }
+                            this.character.jumpAnimationCounter = 0;
+                            this.character.highJumpAnimationCounter = 0;
+                            this.character.highJumpAnimationSet = true;
+                        
                         this.character.jump();
 
                     }
@@ -66,11 +79,15 @@ class World {
                     enemy.isColliding = false;
                 }
             });
-        }, 20);
+        }, 10);
 
         setInterval(() => {
             this.hearts.forEach(heart => {
                 if (this.character.isColliding(heart)) {
+                    if (soundMuted == false) {
+                        this.collect_heart_sound.loop = false;
+                        this.collect_heart_sound.play();
+                    }
                     if (world.character.health >= 57) {
                         world.character.health = 87;
                     } else {
@@ -153,10 +170,10 @@ class World {
                 setTimeout(() => {
                     let newOrc = new EnemyBoss;
                     this.enemies.push(newOrc);
-                }, 3000);
+                }, 1000);
                 this.changeWorld();
 
-            } else if ((world.enemies.length < 10) && this.bossSpawned == false) {
+            } else if ((world.enemies.length < 2) && this.bossSpawned == false) {
                 let rng = Math.random();
                 if (rng < 0.5) {
                     newOrc = new EnemyOne();
@@ -203,7 +220,7 @@ class World {
                     this.characterIsFalling = false;
                     this.enemies.forEach(enemy => {
                         enemy.fallingDown = false;
-                        // enemy.loadImage(enemy.fallingDownImage);
+                        enemy.loadImage(enemy.fallingDownImage);
                     });
                     clearInterval(moveNewBackground);
                 }
