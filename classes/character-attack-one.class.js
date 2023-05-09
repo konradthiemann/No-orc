@@ -21,6 +21,7 @@ class AttackOne extends MovableObject {
         super().loadImage('./img/Mage/Fire/fire1.png');
         this.loadImages(this.IMAGES_ATTACK);
         this.getID();
+        console.log(this.id);
         this.chooseDirection();
         this.animateAttack();
         this.checkCollision();

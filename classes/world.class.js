@@ -50,7 +50,7 @@ class World {
                     enemy.isColliding = true;
                     let jumpOnEnemy = this.checkHeightOnCollision();
 
-                    if (enemy.attackAnimationStarted == false && jumpOnEnemy == false && enemy.dyingAnimationStarted == false && this.character.dyingAnimationStarted == false && enemy.hurtAnimationStarted == false && enemy.fallingDown == false) {
+                    if (enemy.attackAnimationStarted == false && jumpOnEnemy == false && enemy.dyingAnimationStarted == false && this.character.dyingAnimationStarted == false && enemy.hurtAnimationStarted == false && enemy.fallingDown == false && world.characterIsFalling == false) {
                         enemy.attackAnimationStarted = true;
                         enemy.attack(enemy.id);
                         if (soundMuted == false) {
@@ -62,7 +62,7 @@ class World {
                         this.character.hurt(10);
                     }
 
-                    if (enemy.dyingAnimationStarted == false && jumpOnEnemy == true && enemy.hurtAnimationStarted == false) {
+                    if (enemy.dyingAnimationStarted == false && jumpOnEnemy == true && enemy.hurtAnimationStarted == false && world.characterIsFalling == false) {
                         enemy.hurt(enemy.id, 50);
                         if (soundMuted == false) {
                             this.character.jump_on_enemy_sound.loop = false;
@@ -79,7 +79,7 @@ class World {
                     enemy.isColliding = false;
                 }
             });
-        }, 10);
+        }, 5);
 
         setInterval(() => {
             this.hearts.forEach(heart => {
@@ -100,7 +100,7 @@ class World {
                     }
                 }
             });
-        }, 20);
+        }, 5);
     }
 
     checkHeightOnCollision() {
@@ -163,7 +163,6 @@ class World {
 
     createEnemy() {
         setInterval(() => {
-
             let newOrc;
             if (this.bossSpawned == false && this.amountOfDeadEnemys >= 5) {
                 this.bossSpawned = true;
@@ -173,7 +172,7 @@ class World {
                 }, 1000);
                 this.changeWorld();
 
-            } else if ((world.enemies.length < 2) && this.bossSpawned == false) {
+            } else if ((world.enemies.length <= 4) && this.bossSpawned == false) {
                 let rng = Math.random();
                 if (rng < 0.5) {
                     newOrc = new EnemyOne();

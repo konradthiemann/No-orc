@@ -160,6 +160,7 @@ class Character extends MovableObject {
     characterRun() {
         setInterval(() => {
             this.pauseWalkingSound();
+            this.checkCharOnGround();
             this.choseDirection();
             this.checkForJumping();
             this.checkForPossibleAttack();
@@ -167,7 +168,14 @@ class Character extends MovableObject {
         }, 1000 / 60);
     }
 
-    choseDirection(){
+    checkCharOnGround() {
+        if (keyboard.LEFT == false && keyboard.RIGHT == false && this.idleImageCount == 0 && !this.isAboveGround() && this.hurtAnimationStarted == false && this.attackAnimationStarted == false && this.dyingAnimationStarted == false && (this.health > 0) && world.characterIsFalling == false) {
+            this.loadImage('./img/Mage/Idle/idle1.png');
+        }
+
+    }
+
+    choseDirection() {
         if (keyboard.LEFT == true) {
             if (this.x >= -20) {
                 this.playWalkingSound();
@@ -187,19 +195,19 @@ class Character extends MovableObject {
         }
     }
 
-    playWalkingSound(){
+    playWalkingSound() {
         if (!this.isAboveGround() && soundMuted == false) {
             this.walking_sound.play();
         }
     }
 
-    pauseWalkingSound(){
+    pauseWalkingSound() {
         if (soundMuted == false && (this.isAboveGround() || this.speedY > 0)) {
             this.walking_sound.pause();
         }
     }
 
-    checkForJumping(){
+    checkForJumping() {
         if (((keyboard.UP == true || keyboard.SPACE == true) && !this.isAboveGround()) || (keyboard.UP == true && this.jumpCounter == 1 && this.speedY < 0)) {
             this.setHighJumpAnimation();
             playSound(this.jumping_sound, false);
@@ -270,7 +278,7 @@ class Character extends MovableObject {
                 this.idleImageCount = 0;
                 this.animateIdle(idleInterval);
             }
-        }, 80);
+        }, 30);
     }
 
     animateIdle(idleInterval) {
@@ -308,7 +316,7 @@ class Character extends MovableObject {
         }, 100);
     }
 
-    stopHurtAnimation(characterHurt, hurtImageCount, dmg){
+    stopHurtAnimation(characterHurt, hurtImageCount, dmg) {
         if (hurtImageCount == this.IMAGES_HURT.length) {
             this.hurtAnimationStarted = false;
             this.loadImage('./img/Mage/Idle/idle1.png');
@@ -324,7 +332,7 @@ class Character extends MovableObject {
             let animationAttackOne = setInterval(() => {
                 let path = this.IMAGES_ATTACK[this.attackImageCount];
                 this.img = this.imgCache[path];
-                this.interruptAttack();
+                this.interruptAttack(animationAttackOne);
                 this.createFireball();
                 this.stopAttackAnimation(animationAttackOne);
                 this.attackImageCount++;
@@ -332,7 +340,7 @@ class Character extends MovableObject {
         }
     }
 
-    interruptAttack(){
+    interruptAttack(animationAttackOne) {
         if (this.hurtAnimationStarted == true) {
             this.attackAnimationStarted = false;
             this.loadImage('./img/Mage/Idle/idle1.png');
@@ -340,14 +348,14 @@ class Character extends MovableObject {
         }
     }
 
-    createFireball(){
+    createFireball() {
         if (this.attackImageCount == 6 && this.mana >= 20) {
             world.projectiles.push(new AttackOne());
             this.mana = this.mana - 20;
         }
     }
 
-    stopAttackAnimation(animationAttackOne){
+    stopAttackAnimation(animationAttackOne) {
         if (this.attackImageCount == this.IMAGES_ATTACK.length) {
             this.attackAnimationStarted = false;
             this.loadImage('./img/Mage/Idle/idle1.png');
@@ -357,28 +365,92 @@ class Character extends MovableObject {
 
     setHealthPoints() {
         setInterval(() => {
+            let healthPoint;
             this.world.hpPoints.splice(0, this.world.hpPoints.length);
-            let healthPoint = new Healthpoint(this.hpCornerLeft, 25, 23)
+            this.createCornerLeftHealthPointElement();
+            this.createHealthPointElement(healthPoint);
+            this.createCornerRightHealthPointElement(healthPoint);
+        }, 1000 / 20);
+    }
+
+    createCornerLeftHealthPointElement() {
+        let healthPoint = new Healthpoint(this.hpCornerLeft, 25, 23)
+        this.world.hpPoints.push(healthPoint);
+    }
+
+    createHealthPointElement(healthPoint) {
+        for (let i = 0; i < this.health - 1; i++) {
+            if (i > 0 && i < this.health - 1) {
+                let x = 25 + i * 2;
+                healthPoint = new Healthpoint(this.hpPoint, x, 23)
+                this.world.hpPoints.push(healthPoint);
+            }
+        }
+    }
+
+    createCornerRightHealthPointElement(healthPoint) {
+        if (this.health <= 0) {
+            this.health = 0;
+            let x = 25 + this.health * 2;
+            healthPoint = new Healthpoint(this.hpCornerRight, x, 23)
             this.world.hpPoints.push(healthPoint);
-            for (let i = 0; i < this.health - 1; i++) {
-                if (i > 0 && i < this.health - 1) {
-                    let x = 25 + i * 2;
-                    let healthPoint = new Healthpoint(this.hpPoint, x, 23)
-                    this.world.hpPoints.push(healthPoint);
-                }
+        }
+        else {
+            let x = 23 + this.health * 2;
+            healthPoint = new Healthpoint(this.hpCornerRight, x, 23)
+            this.world.hpPoints.push(healthPoint);
+        }
+    }
+
+    setManaPoints() {
+        this.createManaBar();
+        this.fillManaBar();
+    }
+
+    createManaBar() {
+        setInterval(() => {
+            let manaPoint;
+            this.world.manaPoints.splice(0, this.world.manaPoints.length);
+            this.createCornerLeftManaPointElement(manaPoint);
+            this.createManaPointElement(manaPoint);
+            this.createCornerRightManaPointElement(manaPoint);
+        }, 500);
+    }
+
+    createCornerLeftManaPointElement(manaPoint) {
+        manaPoint = new Healthpoint(this.manaCornerLeft, 25, 50)
+        this.world.manaPoints.push(manaPoint);
+    }
+
+    createManaPointElement(manaPoint) {
+        for (let i = 0; i < this.mana - 1; i++) {
+            if (i > 0 && i < this.mana - 1) {
+                let x = 25 + i * 2;
+                manaPoint = new Healthpoint(this.manaPoint, x, 50)
+                this.world.manaPoints.push(manaPoint);
             }
-            if (this.health <= 0) {
-                this.health = 0;
-                let x = 25 + this.health * 2;
-                healthPoint = new Healthpoint(this.hpCornerRight, x, 23)
-                this.world.hpPoints.push(healthPoint);
+        }
+    }
+
+    createCornerRightManaPointElement(manaPoint) {
+        let x = 23 + this.mana * 2;
+        manaPoint = new Healthpoint(this.manaCornerRight, x, 50)
+        this.world.manaPoints.push(manaPoint);
+    }
+
+    fillManaBar(){
+        setInterval(() => {
+            if (this.mana <= 86 && this.manaIntervalSet == false) {
+                this.manaIntervalSet = true;
+                let setManaInterval = setInterval(() => {
+                    if (this.mana > 86) {
+                        this.manaIntervalSet = false;
+                        clearInterval(setManaInterval);
+                    }
+                    this.mana = this.mana + 1;
+                }, 200);
             }
-            else {
-                let x = 23 + this.health * 2;
-                healthPoint = new Healthpoint(this.hpCornerRight, x, 23)
-                this.world.hpPoints.push(healthPoint);
-            }
-        }, 1000 / 60);
+        }, 1000 / 20);
     }
 
     checkLife() {
@@ -401,39 +473,6 @@ class Character extends MovableObject {
                 clearInterval(dying);
             }
             dyingImageCount++;
-        }, 80);
-    }
-
-    setManaPoints() {
-        setInterval(() => {
-            this.world.manaPoints.splice(0, this.world.manaPoints.length);
-            let manaPoint = new Healthpoint(this.manaCornerLeft, 25, 50)
-            this.world.manaPoints.push(manaPoint);
-            for (let i = 0; i < this.mana - 1; i++) {
-
-                if (i > 0 && i < this.mana - 1) {
-                    let x = 25 + i * 2;
-                    let manaPoint = new Healthpoint(this.manaPoint, x, 50)
-                    this.world.manaPoints.push(manaPoint);
-                }
-            }
-            let x = 23 + this.mana * 2;
-            manaPoint = new Healthpoint(this.manaCornerRight, x, 50)
-            this.world.manaPoints.push(manaPoint);
-        }, 20);
-
-        setInterval(() => {
-            if (this.mana <= 86 && this.manaIntervalSet == false) {
-                this.manaIntervalSet = true;
-                let setManaInterval = setInterval(() => {
-                    if (this.mana >= 86) {
-                        this.manaIntervalSet = false;
-                        clearInterval(setManaInterval);
-                    }
-                    this.mana = this.mana + 1;
-                }, 200);
-            }
-        }, 120);
-
+        }, 1000 / 20);
     }
 }

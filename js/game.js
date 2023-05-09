@@ -83,7 +83,7 @@ function playSound(soundPath, boolean) {
  * @param {*} soundPath 
  */
 function pauseSound(soundPath) {
-    if (soundMuted == false) {
+    if (soundMuted == false && soundPath.play()) {
         soundPath.pause();
     }
 }

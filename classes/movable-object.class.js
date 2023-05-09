@@ -91,7 +91,6 @@ class MovableObject extends DrawableObject {
         }
 
         //Endboss
-
         if ((mo instanceof EnemyBoss) && this instanceof Character) {
             return this.x + 30 + this.width - 110 > mo.x + 35
                 && this.y + 60 + this.height - 80 > mo.y + 35
@@ -100,7 +99,6 @@ class MovableObject extends DrawableObject {
         }
 
         //Fireball
-
         if ((mo instanceof EnemyOne || mo instanceof EnemyTwo) && this instanceof AttackOne) {
             return this.x + this.width > mo.x + 20
                 && this.y + this.height > mo.y + 15
@@ -116,7 +114,6 @@ class MovableObject extends DrawableObject {
         }
 
         //BossRangeAttack
-
         if (mo instanceof Character && this instanceof BossRangeAttack) {
             return this.x + this.width > mo.x + 30
                 && this.y + this.height > mo.y + 70
@@ -163,36 +160,36 @@ class MovableObject extends DrawableObject {
         }
     }
 
-    /**
-    * check for finished animation, removes projectile, stop animation sound, clear intervals
-    * @param {*} animationImageCounter
-    * @param {*} intervalName
-    * @param {*} id
-    * @param {*} soundPath
-    */
-    interruptProjectileMoving(animationImageCounter, intervalName, id, soundPath) {
-        if (animationImageCounter == this.IMAGES_ATTACK.length) {
-            this.removeProjectile(id);
-            clearInterval(intervalName);
-            clearInterval(this.checkCollisionInterval);
-            pauseSound(soundPath);
-        }
-    }
-
      /**
     * move projectile, rotate images
     */
      animateAttack() {
         let animationImageCounter = 0;
         let projectileDistance = 0;
-        let animateBossRangeAttack = setInterval(() => {
+        let animateProjectile = setInterval(() => {
             let path = this.IMAGES_ATTACK[animationImageCounter];
             this.img = this.imgCache[path];
             this.moveProjectile(projectileDistance);
-            this.interruptProjectileMoving(animationImageCounter, animateBossRangeAttack, this.id, this.electric_sound);
+            this.interruptProjectileMoving(animationImageCounter, animateProjectile, this.id, this.electric_sound);
             projectileDistance++;
             animationImageCounter++;
         }, 1000 / 20);
+    }
+
+     /**
+    * check for finished animation, removes projectile, stop animation sound, clear intervals
+    * @param {*} animationImageCounter
+    * @param {*} intervalName
+    * @param {*} id
+    * @param {*} soundPath
+    */
+     interruptProjectileMoving(animationImageCounter, intervalName, id, soundPath) {
+        if (animationImageCounter == this.IMAGES_ATTACK.length) {
+            this.removeProjectile(id);
+            clearInterval(intervalName);
+            clearInterval(this.checkCollisionInterval);
+            pauseSound(soundPath);
+        }
     }
 
     /**
@@ -202,6 +199,7 @@ class MovableObject extends DrawableObject {
     removeProjectile(id) {
         for (let i = 0; i < world.projectiles.length; i++) {
             if (world.projectiles[i].id == id) {
+                this.hitTarget = true;
                 world.projectiles.splice(i, 1);
             }
         }
