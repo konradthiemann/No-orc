@@ -192,4 +192,5 @@ const level1 = new Level(
     [
         // new Heart(300, 400),
     ],
+    [],
 );

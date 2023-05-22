@@ -1,4 +1,32 @@
-class Enemy extends MovableObject {
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: enemy.class.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: enemy.class.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>class Enemy extends MovableObject {
     health = 100;
     enemyIsDead = false;
     otherDirection = true;
@@ -34,7 +62,7 @@ class Enemy extends MovableObject {
      * check if enemy has to move right
      */
     checkForDirectionRight() {
-        if ((this.x / 2 < world.character.x / 2) && this.attackAnimationStarted == false && this.dyingAnimationStarted == false && this.hurtAnimationStarted == false && this.fallingDown == false && this.enemyIsDead == false && world.characterIsFalling == false) {
+        if ((this.x / 2 &lt; world.character.x / 2) &amp;&amp; this.attackAnimationStarted == false &amp;&amp; this.dyingAnimationStarted == false &amp;&amp; this.hurtAnimationStarted == false &amp;&amp; this.fallingDown == false &amp;&amp; this.enemyIsDead == false &amp;&amp; world.characterIsFalling == false) {
             this.otherDirection = false;
             if (this.isColliding == false) {
                 this.playAnimation(this.IMAGES_WALK);
@@ -47,7 +75,7 @@ class Enemy extends MovableObject {
      * check if enemy has to move left
      */
     checkForDirectionLeft() {
-        if ((this.x / 2 > world.character.x / 2) && this.attackAnimationStarted == false && this.dyingAnimationStarted == false && this.hurtAnimationStarted == false && this.fallingDown == false && this.enemyIsDead == false && world.characterIsFalling == false) {
+        if ((this.x / 2 > world.character.x / 2) &amp;&amp; this.attackAnimationStarted == false &amp;&amp; this.dyingAnimationStarted == false &amp;&amp; this.hurtAnimationStarted == false &amp;&amp; this.fallingDown == false &amp;&amp; this.enemyIsDead == false &amp;&amp; world.characterIsFalling == false) {
             this.otherDirection = true;
             if (this.isColliding == false) {
                 this.playAnimation(this.IMAGES_WALK);
@@ -89,7 +117,7 @@ class Enemy extends MovableObject {
      * @param {object} enemy 
      */
     checkForHurt(enemy, attackImageCount) {
-        if (world.character.isColliding(enemy) && world.character.hurtAnimationStarted == false && (attackImageCount == this.IMAGES_ATTACK.length - 6)) {
+        if (world.character.isColliding(enemy) &amp;&amp; world.character.hurtAnimationStarted == false &amp;&amp; (attackImageCount == this.IMAGES_ATTACK.length - 6)) {
             world.character.hurtAnimationStarted = true;
             world.character.hurt(enemy.autoAttackDmg);
         }
@@ -111,7 +139,7 @@ class Enemy extends MovableObject {
      * @param {let} enemyId 
      */
     searchForDeadEnemy(enemyId) {
-        for (let i = 0; i < world.enemies.length; i++) {
+        for (let i = 0; i &lt; world.enemies.length; i++) {
             if (enemyId == world.enemies[i].id) {
                 this.startDyingAnimation();
             }
@@ -150,7 +178,7 @@ class Enemy extends MovableObject {
      * @param {let} dmg 
      */
     hurt(enemyId, dmg) {
-        if (this.hurtAnimationStarted == false && this.dyingAnimationStarted == false && this.enemyIsDead == false) {
+        if (this.hurtAnimationStarted == false &amp;&amp; this.dyingAnimationStarted == false &amp;&amp; this.enemyIsDead == false) {
             this.health = this.health - dmg;
             let hurtImageCount = 0;
             this.hurtAnimationStarted = true;
@@ -180,11 +208,11 @@ class Enemy extends MovableObject {
     }
 
     /**
-     * check if enemy health < 0
+     * check if enemy health &lt; 0
      * @param {let} enemyId 
      */
     checkEnemyHealth(enemyId) {
-        if (this.health <= 0) {
+        if (this.health &lt;= 0) {
             this.die(enemyId);
         }
     }
@@ -194,7 +222,7 @@ class Enemy extends MovableObject {
      */
     checkEnemyDead() {
         setInterval(() => {
-            if (this.enemyIsDead && this instanceof EnemyBoss && victoryScreenSet == false) {
+            if (this.enemyIsDead &amp;&amp; this instanceof EnemyBoss &amp;&amp; victoryScreenSet == false) {
                 this.showVictoryScreen();
                 this.removeObject(this);
             }
@@ -213,9 +241,6 @@ class Enemy extends MovableObject {
         world.screens.splice(0, world.screens.length)
         let victoryScreen = new VictoryScreen();
         world.screens.push(victoryScreen);
-        setTimeout(() => {
-            document.getElementById('enterBtn').style.display = "flex";    
-        }, 500);
     }
 
     /**
@@ -245,11 +270,33 @@ class Enemy extends MovableObject {
      */
     removeObject(object) {
         setTimeout(() => {
-            for (let i = 0; i < world.enemies.length; i++) {
+            for (let i = 0; i &lt; world.enemies.length; i++) {
                 if (world.enemies[i] === object) {
                     world.enemies.splice(i, 1);
                 }
             }
         }, 3000);
     }
-}
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Fri May 19 2023 17:35:29 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

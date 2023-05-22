@@ -26,6 +26,9 @@ class Heart extends MovableObject{
         this.animateHeart();
     }
 
+    /**
+     * animate heart
+     */
     animateHeart(){
         setInterval(() => {
             this.playAnimation(this.IMAGES_HEART);

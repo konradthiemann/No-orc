@@ -1,4 +1,32 @@
-class Character extends MovableObject {
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: character.class.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: character.class.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>class Character extends MovableObject {
     world;
     health = 87;
     mana = 87;
@@ -167,7 +195,7 @@ class Character extends MovableObject {
      * @returns threshold
      */
     isAboveGround() {
-        return this.y < 299;
+        return this.y &lt; 299;
     }
 
     /**
@@ -188,7 +216,7 @@ class Character extends MovableObject {
      * check if char is on ground
      */
     checkCharOnGround() {
-        if (keyboard.LEFT == false && keyboard.RIGHT == false && this.idleImageCount == 0 && !this.isAboveGround() && this.hurtAnimationStarted == false && this.attackAnimationStarted == false && this.dyingAnimationStarted == false && (this.health > 0) && world.characterIsFalling == false) {
+        if (keyboard.LEFT == false &amp;&amp; keyboard.RIGHT == false &amp;&amp; this.idleImageCount == 0 &amp;&amp; !this.isAboveGround() &amp;&amp; this.hurtAnimationStarted == false &amp;&amp; this.attackAnimationStarted == false &amp;&amp; this.dyingAnimationStarted == false &amp;&amp; (this.health > 0) &amp;&amp; world.characterIsFalling == false) {
             this.loadImage('./img/Mage/Idle/idle1.png');
         }
     }
@@ -220,7 +248,7 @@ class Character extends MovableObject {
      */
     checkForMovingRight() {
         if (keyboard.RIGHT == true) {
-            if (this.x <= 2140) {
+            if (this.x &lt;= 2140) {
                 this.playWalkingSound();
                 this.moveRight();
             }
@@ -233,7 +261,7 @@ class Character extends MovableObject {
      * play walking sound
      */
     playWalkingSound() {
-        if (!this.isAboveGround() && soundMuted == false) {
+        if (!this.isAboveGround() &amp;&amp; soundMuted == false) {
             this.walking_sound.play();
         }
     }
@@ -242,7 +270,7 @@ class Character extends MovableObject {
      * pause walking sound
      */
     pauseWalkingSound() {
-        if (soundMuted == false && (this.isAboveGround() || this.speedY > 0)) {
+        if (soundMuted == false &amp;&amp; (this.isAboveGround() || this.speedY > 0)) {
             this.walking_sound.pause();
         }
     }
@@ -251,7 +279,7 @@ class Character extends MovableObject {
      * check if jump can be executed
      */
     checkForJumping() {
-        if (((keyboard.UP == true || keyboard.SPACE == true) && !this.isAboveGround()) || (keyboard.UP == true && this.jumpCounter == 1 && this.speedY < 0)) {
+        if (((keyboard.UP == true || keyboard.SPACE == true) &amp;&amp; !this.isAboveGround()) || (keyboard.UP == true &amp;&amp; this.jumpCounter == 1 &amp;&amp; this.speedY &lt; 0)) {
             this.setHighJumpAnimation();
             playSound(this.jumping_sound, false);
             this.jump();
@@ -271,7 +299,7 @@ class Character extends MovableObject {
      * check if attack can be executed
      */
     checkForPossibleAttack() {
-        if (keyboard.X == true && this.attackAnimationStarted == false && this.hurtAnimationStarted == false && this.dyingAnimationStarted == false && world.characterIsFalling == false) {
+        if (keyboard.X == true &amp;&amp; this.attackAnimationStarted == false &amp;&amp; this.hurtAnimationStarted == false &amp;&amp; this.dyingAnimationStarted == false &amp;&amp; world.characterIsFalling == false) {
             this.attackAnimationStarted = true;
             this.attackOne();
         }
@@ -281,11 +309,11 @@ class Character extends MovableObject {
      * moves world camera
      */
     moveWorldCamera() {
-        if (this.x + this.world.camera_x <= 220 && this.thresholdReached !== 1 && this.x >= 220) {
+        if (this.x + this.world.camera_x &lt;= 220 &amp;&amp; this.thresholdReached !== 1 &amp;&amp; this.x >= 220) {
             this.world.camera_x = -this.x + 221;
             this.thresholdReached = true;
         }
-        if (this.x + this.world.camera_x >= 350 && this.thresholdReached == 1 && this.x <= 2000) {
+        if (this.x + this.world.camera_x >= 350 &amp;&amp; this.thresholdReached == 1 &amp;&amp; this.x &lt;= 2000) {
             this.world.camera_x = -this.x + 351;
             this.thresholdReached = true;
         }
@@ -296,13 +324,13 @@ class Character extends MovableObject {
      */
     chooseJumpAnimation() {
         setInterval(() => {
-            if (this.isAboveGround() && (this.jumpAnimationCounter < this.IMAGES_JUMPING.length) && this.highJumpAnimationSet == false && world.characterIsFalling == false) {
+            if (this.isAboveGround() &amp;&amp; (this.jumpAnimationCounter &lt; this.IMAGES_JUMPING.length) &amp;&amp; this.highJumpAnimationSet == false &amp;&amp; world.characterIsFalling == false) {
                 this.animateJump();
             }
-            else if (this.isAboveGround() && (this.highJumpAnimationCounter < this.IMAGES_HIGH_JUMPING.length) && this.highJumpAnimationSet == true && world.characterIsFalling == false) {
+            else if (this.isAboveGround() &amp;&amp; (this.highJumpAnimationCounter &lt; this.IMAGES_HIGH_JUMPING.length) &amp;&amp; this.highJumpAnimationSet == true &amp;&amp; world.characterIsFalling == false) {
                 this.animateHighJump();
             }
-            else if ((keyboard.RIGHT == true || keyboard.LEFT == true) && !this.isAboveGround() && this.attackAnimationStarted == false && world.characterIsFalling == false) {
+            else if ((keyboard.RIGHT == true || keyboard.LEFT == true) &amp;&amp; !this.isAboveGround() &amp;&amp; this.attackAnimationStarted == false &amp;&amp; world.characterIsFalling == false) {
                 this.playAnimation(this.IMAGES_RUN);
             }
         }, 80);
@@ -335,7 +363,7 @@ class Character extends MovableObject {
      */
     checkForIdle() {
         setInterval(() => {
-            if (keyboard.RIGHT == false && keyboard.LEFT == false && this.idleIntervalSet == false && !this.isAboveGround() && this.hurtAnimationStarted == false && this.attackAnimationStarted == false && this.dyingAnimationStarted == false && this.health > 0 && world.characterIsFalling == false) {
+            if (keyboard.RIGHT == false &amp;&amp; keyboard.LEFT == false &amp;&amp; this.idleIntervalSet == false &amp;&amp; !this.isAboveGround() &amp;&amp; this.hurtAnimationStarted == false &amp;&amp; this.attackAnimationStarted == false &amp;&amp; this.dyingAnimationStarted == false &amp;&amp; this.health > 0 &amp;&amp; world.characterIsFalling == false) {
                 this.loadImage('./img/Mage/Idle/idle1.png');
                 this.idleIntervalSet = true;
                 let idleInterval = 3000 + Math.random() * 5000;
@@ -365,7 +393,7 @@ class Character extends MovableObject {
      * @param {let} idleCharacter 
      */
     interruptIdle(idleCharacter) {
-        if ((this.idleImageCount == this.IMAGES_IDLE.length) || keyboard.LEFT == true || keyboard.RIGHT == true || keyboard.UP == true || this.hurtAnimationStarted == true || this.isAboveGround() || this.attackAnimationStarted == true || this.dyingAnimationStarted == true || (this.health <= 0) || world.characterIsFalling == true) {
+        if ((this.idleImageCount == this.IMAGES_IDLE.length) || keyboard.LEFT == true || keyboard.RIGHT == true || keyboard.UP == true || this.hurtAnimationStarted == true || this.isAboveGround() || this.attackAnimationStarted == true || this.dyingAnimationStarted == true || (this.health &lt;= 0) || world.characterIsFalling == true) {
             this.idleIntervalSet = false;
             this.idleImageCount = 0;
             this.loadImage('./img/Mage/Idle/idle1.png');
@@ -415,7 +443,7 @@ class Character extends MovableObject {
      * starts attack animation
      */
     attackOne() {
-        if (this.hurtAnimationStarted == false && this.dyingAnimationStarted == false) {
+        if (this.hurtAnimationStarted == false &amp;&amp; this.dyingAnimationStarted == false) {
             this.attackImageCount = 0;
             let animationAttackOne = setInterval(() => {
                 let path = this.IMAGES_ATTACK[this.attackImageCount];
@@ -444,7 +472,7 @@ class Character extends MovableObject {
      * create new element of projectile
      */
     createFireball() {
-        if (this.attackImageCount == 6 && this.mana >= 20) {
+        if (this.attackImageCount == 6 &amp;&amp; this.mana >= 20) {
             world.projectiles.push(new AttackOne());
             this.mana = this.mana - 20;
         }
@@ -488,8 +516,8 @@ class Character extends MovableObject {
      * @param {object} healthPoint 
      */
     createHealthPointElement(healthPoint) {
-        for (let i = 0; i < this.health - 1; i++) {
-            if (i > 0 && i < this.health - 1) {
+        for (let i = 0; i &lt; this.health - 1; i++) {
+            if (i > 0 &amp;&amp; i &lt; this.health - 1) {
                 let x = 25 + i * 2;
                 healthPoint = new Healthpoint(this.hpPoint, x, 23)
                 this.world.hpPoints.push(healthPoint);
@@ -502,7 +530,7 @@ class Character extends MovableObject {
      * @param {object} healthPoint 
      */
     createCornerRightHealthPointElement(healthPoint) {
-        if (this.health <= 0) {
+        if (this.health &lt;= 0) {
             this.health = 0;
             let x = 25 + this.health * 2;
             healthPoint = new Healthpoint(this.hpCornerRight, x, 23)
@@ -550,8 +578,8 @@ class Character extends MovableObject {
      * @param {object} manaPoint 
      */
     createManaPointElement(manaPoint) {
-        for (let i = 0; i < this.mana - 1; i++) {
-            if (i > 0 && i < this.mana - 1) {
+        for (let i = 0; i &lt; this.mana - 1; i++) {
+            if (i > 0 &amp;&amp; i &lt; this.mana - 1) {
                 let x = 25 + i * 2;
                 manaPoint = new Healthpoint(this.manaPoint, x, 50)
                 this.world.manaPoints.push(manaPoint);
@@ -574,7 +602,7 @@ class Character extends MovableObject {
      */
     fillManaBar() {
         setInterval(() => {
-            if (this.mana <= 86 && this.manaIntervalSet == false) {
+            if (this.mana &lt;= 86 &amp;&amp; this.manaIntervalSet == false) {
                 this.manaIntervalSet = true;
                 this.startFillingManaBar();
             }
@@ -607,7 +635,7 @@ class Character extends MovableObject {
      * check if character has to die
      */
     checkLife() {
-        if (this.health <= 0) {
+        if (this.health &lt;= 0) {
             this.die();
         }
     }
@@ -658,8 +686,27 @@ class Character extends MovableObject {
         world.screens.splice(0, world.screens.length)
         let losingScreen = new LosingScreen();
         world.screens.push(losingScreen);
-        setTimeout(() => {
-            document.getElementById('enterBtn').style.display = "flex";
-        }, 500);
     }
-}
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Fri May 19 2023 17:35:29 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
