@@ -1,6 +1,5 @@
 class StatusBar {
     barBackground;
-    hpCornerLeft;
     point;
     barFront;
 

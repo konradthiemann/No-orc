@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="fonts.css">
-    <title>No-orc</title>
+    <title>Ap-orc-alypse</title>
 
-    
+
     <script src="classes/keyboard.class.js"></script>
     <script src="classes/world.class.js"></script>
     <script src="classes/drawable-object.class.js"></script>
@@ -27,20 +29,24 @@
     <script src="classes/boss-range-attack.class.js"></script>
     <script src="classes/level.class.js"></script>
     <script src="classes/heart.class.js"></script>
+    <script src="classes/losingScreen.class.js"></script>
+    <script src="classes/victoryScreen.class.js"></script>
 
     <script src="classes/statusbar.class.js"></script>
     <script src="classes/character-healthbar.class.js"></script>
     <script src="classes/character-manabar.class.js"></script>
 
     <script src="classes/game-discription.class.js"></script>
-    
+
     <script src="levels/level1.js"></script>
     <script src="js/game.js"></script>
-    
+
 </head>
 
 <body onload="init()">
-    <h1>Ap-orc-alypse</h1>
-    <canvas width="720px" height="480px" id="canvas"></canvas>
+    <div class="fullscreen" id="fullscreen">
+        <canvas class = "canvas" width="720px" height="480px" id="canvas"></canvas>
+    </div>
 </body>
+
 </html>

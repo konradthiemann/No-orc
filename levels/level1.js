@@ -186,10 +186,11 @@ const level1 = new Level(
         // new EnemyTwo(),
         // new EnemyOne(),
         // new EnemyTwo(),
-        new EnemyBoss(),
+        // new EnemyBoss(),
     ],
     [],
     [
         // new Heart(300, 400),
     ],
+    [],
 );
